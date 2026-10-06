@@ -123,7 +123,8 @@ const jsonLd = {
 };
 
 // До гідратації: позначаємо JS/рух/повторний візит, щоб не було спалаху контенту
-const boot = `(function(){var d=document.documentElement;d.classList.add('js','on-cover');try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('js-motion');if(sessionStorage.getItem('konk-intro'))d.classList.add('visited')}catch(e){}})();`;
+// on-cover — лише головна (hero на першому екрані); перехід на /#секція — без прелоадера
+const boot = `(function(){var d=document.documentElement,l=location;d.classList.add('js');if(l.pathname==='/')d.classList.add('on-cover');try{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('js-motion');if(sessionStorage.getItem('konk-intro')||l.hash.length>1)d.classList.add('visited')}catch(e){}})();`;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

@@ -2,7 +2,9 @@
 
 import { AnimatePresence, m } from "motion/react";
 import { useEffect, useRef, type RefObject } from "react";
+import Link from "next/link";
 import { sections, content } from "@/content/uk";
+import { newsUi } from "@/content/news";
 import { site } from "@/config/site";
 import { getLenis, scrollToTarget } from "@/lib/lenis";
 import { Logo } from "@/components/ui/LogoMark";
@@ -16,10 +18,12 @@ export function Menu({
   open,
   onClose,
   returnFocus,
+  base = "",
 }: {
   open: boolean;
   onClose: () => void;
   returnFocus: RefObject<HTMLButtonElement | null>;
+  base?: string;
 }) {
   const panel = useRef<HTMLDivElement>(null);
   const closeBtn = useRef<HTMLButtonElement>(null);
@@ -56,6 +60,8 @@ export function Menu({
   }, [open, onClose]);
 
   const go = (e: React.MouseEvent, id: string) => {
+    // На внутрішніх сторінках — звичайний перехід на /#секція
+    if (base) return;
     e.preventDefault();
     onClose();
     returnFocus.current?.blur();
@@ -94,7 +100,7 @@ export function Menu({
               {sections.map((s, i) => (
                 <li key={s.id} className="menu__item">
                   <m.a
-                    href={`#${s.id}`}
+                    href={`${base}#${s.id}`}
                     onClick={(e) => go(e, s.id)}
                     className="menu__link"
                     initial={{ y: "110%" }}
@@ -107,6 +113,28 @@ export function Menu({
                   </m.a>
                 </li>
               ))}
+              <li className="menu__item">
+                <m.div
+                  initial={{ y: "110%" }}
+                  animate={{ y: "0%" }}
+                  exit={{ y: "-110%", transition: { duration: 0.4, ease: EASE_PANEL } }}
+                  transition={{ delay: 0.28 + sections.length * 0.035, duration: 0.9, ease: EASE_OUT }}
+                >
+                  {base ? (
+                    <Link href="/novyny" onClick={onClose} className="menu__link">
+                      <span className="menu__num t-mono">{String(sections.length + 1).padStart(2, "0")}</span>
+                      <span className="menu__label">{newsUi.navLabel}</span>
+                    </Link>
+                  ) : (
+                    // З головної — повне завантаження: у розділу власний макет без прелоадера й WebGL
+                    // eslint-disable-next-line @next/next/no-html-link-for-pages
+                    <a href="/novyny" className="menu__link">
+                      <span className="menu__num t-mono">{String(sections.length + 1).padStart(2, "0")}</span>
+                      <span className="menu__label">{newsUi.navLabel}</span>
+                    </a>
+                  )}
+                </m.div>
+              </li>
             </ol>
           </nav>
 

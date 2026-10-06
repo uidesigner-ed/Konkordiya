@@ -33,7 +33,14 @@ export function SmoothScroll() {
     Promise.all([reduced ? null : import("lenis"), loadFx()]).then(([lenisMod, { gsap, ScrollTrigger }]) => {
       if (dead) return;
       // Шрифти змінюють висоти — перераховуємо тригери
-      document.fonts?.ready.then(() => ScrollTrigger.refresh());
+      document.fonts?.ready.then(() => {
+        ScrollTrigger.refresh();
+        // Прийшли за посиланням на якір (/#poslugy з іншої сторінки): після пінів і шрифтів
+        // позиції зсунулися — доводимо до цілі ще раз
+        const hash = decodeURIComponent(window.location.hash);
+        const target = hash.length > 1 ? document.getElementById(hash.slice(1)) : null;
+        if (target) requestAnimationFrame(() => scrollToTarget(target, { immediate: true }));
+      });
       if (!lenisMod) return;
 
       const lenis: Lenis = new lenisMod.default({

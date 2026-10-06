@@ -3,7 +3,7 @@ import { chromium } from "playwright";
 import fs from "node:fs";
 
 const OUT = process.argv[2] ?? "shots";
-const URL = process.env.URL ?? "http://localhost:3100/";
+const URL = process.env.URL ?? "http://localhost:3000/";
 const all = {
   desktop: { width: 1440, height: 900, dpr: 1 },
   mobile: { width: 390, height: 844, dpr: 2, mobile: true },

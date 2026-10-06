@@ -89,6 +89,40 @@ export const IconArrowDown = (p: P) => (
   </svg>
 );
 
+export const IconArrowRight = (p: P) => (
+  <svg {...base(p.size ?? 18, 24, p)} strokeWidth={1.6}>
+    <path d="M4 12h16M14 6l6 6-6 6" />
+  </svg>
+);
+
+export const IconFacebook = (p: P) => (
+  <svg {...base(p.size ?? 22, 24, p)} strokeWidth={1.5}>
+    <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
+    <path d="M15.3 7.6h-1.6c-1.3 0-2.2.9-2.2 2.2v10.7M9.2 12.6h5.6" />
+  </svg>
+);
+
+export const IconLink = (p: P) => (
+  <svg {...base(p.size ?? 22, 24, p)} strokeWidth={1.5}>
+    <path d="M10 14a4.2 4.2 0 0 0 6 0l3-3a4.2 4.2 0 0 0-6-6l-1 1" />
+    <path d="M14 10a4.2 4.2 0 0 0-6 0l-3 3a4.2 4.2 0 0 0 6 6l1-1" />
+  </svg>
+);
+
+export const IconShare = (p: P) => (
+  <svg {...base(p.size ?? 22, 24, p)} strokeWidth={1.5}>
+    <path d="M12 3.5v11M8 7.5l4-4 4 4" />
+    <path d="M7 10.5H5.5v10h13v-10H17" />
+  </svg>
+);
+
+export const IconSearch = (p: P) => (
+  <svg {...base(p.size ?? 20, 24, p)} strokeWidth={1.6}>
+    <circle cx="10.5" cy="10.5" r="6.5" />
+    <path d="m15.5 15.5 5 5" />
+  </svg>
+);
+
 export const IconStar = (p: P) => (
   <svg {...base(p.size ?? 16, 24, p)} fill="currentColor" stroke="none">
     <path d="m12 2.8 2.8 5.9 6.4.8-4.7 4.4 1.2 6.3L12 17.1l-5.7 3.1 1.2-6.3-4.7-4.4 6.4-.8L12 2.8Z" />

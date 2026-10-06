@@ -18,6 +18,7 @@ export function scrollToTarget(target: string | HTMLElement, opts: { immediate?:
   if (!el) return;
   const lenis = getLenis();
   if (lenis) {
+    // Lenis сам враховує scroll-padding-top документа та scroll-margin-top цілі
     lenis.scrollTo(el, { offset: 0, duration: 1.6, immediate: opts.immediate, easing: (t) => 1 - Math.pow(1 - t, 4) });
   } else {
     el.scrollIntoView({ behavior: opts.immediate ? "auto" : "smooth", block: "start" });

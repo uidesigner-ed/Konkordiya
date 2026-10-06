@@ -26,8 +26,12 @@ export const nav = [
   { href: "#poslugy", label: "Послуги" },
   { href: "#suprovid", label: "Супровід" },
   { href: "#dodatkovo", label: "Додатково" },
+  { href: "/novyny", label: "Новини" },
   { href: "#kontakty", label: "Контакти" },
 ] as const;
+
+/** Якір секції головної → посилання з урахуванням сторінки ("" — головна, "/" — внутрішні) */
+export const navHref = (href: string, base = "") => (href.startsWith("#") ? `${base}${href}` : href);
 
 export const content = {
   hero: {

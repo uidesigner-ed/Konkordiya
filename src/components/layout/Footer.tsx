@@ -3,12 +3,12 @@
 import { useEffect, useRef } from "react";
 import { useFx } from "@/lib/fx";
 import { MQ } from "@/lib/motion";
-import { content, nav } from "@/content/uk";
+import { content, nav, navHref } from "@/content/uk";
 import { site } from "@/config/site";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 
 /** Футер: слоган, навігація та величезний «КОНКОРДІЯ», що підводиться з-під лінії. */
-export function Footer() {
+export function Footer({ base = "" }: { base?: string }) {
   const root = useRef<HTMLElement>(null);
   const word = useRef<HTMLParagraphElement>(null);
   const f = content.footer;
@@ -65,7 +65,7 @@ export function Footer() {
           <ul>
             {nav.map((n) => (
               <li key={n.href}>
-                <a href={n.href} className="link-line">
+                <a href={navHref(n.href, base)} className="link-line">
                   {n.label}
                 </a>
               </li>
@@ -109,7 +109,7 @@ export function Footer() {
         <a href={site.privacyUrl} target="_blank" rel="noopener" className="link-line">
           {f.privacy}
         </a>
-        <a href="#top" className="link-line">
+        <a href={base ? "#main" : "#top"} className="link-line">
           {f.toTop}
         </a>
       </div>

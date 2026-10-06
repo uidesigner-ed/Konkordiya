@@ -1,15 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { onIntroDone, prefersReducedMotion } from "@/lib/motion";
-import { nav, content } from "@/content/uk";
+import { nav, navHref, content } from "@/content/uk";
 import { site } from "@/config/site";
 import { Logo } from "@/components/ui/LogoMark";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 import { IconPhone } from "@/components/ui/Icons";
 import { Menu } from "./Menu";
 
-export function Header() {
+/** base: "" — головна (якорі секцій), "/" — внутрішні сторінки (посилання на /#секція) */
+export function Header({ base = "" }: { base?: string }) {
+  const pathname = usePathname();
   const ref = useRef<HTMLElement>(null);
   const menuBtn = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -56,19 +60,37 @@ export function Header() {
         data-scrolled={scrolled}
       >
         <div className="site-header__inner">
-          <a href="#top" className="site-header__logo" aria-label={`${site.name} — на початок сторінки`}>
+          <a
+            href={base ? "/" : "#top"}
+            className="site-header__logo"
+            aria-label={base ? `${site.name} — на головну` : `${site.name} — на початок сторінки`}
+          >
             <Logo />
           </a>
 
           <nav aria-label="Основна навігація" className="site-header__nav">
-            <ul className="flex items-center gap-8 xl:gap-10">
-              {nav.map((n) => (
-                <li key={n.href}>
-                  <a href={n.href} className="link-line text-[15px]">
-                    {n.label}
-                  </a>
-                </li>
-              ))}
+            <ul className="flex items-center gap-6 xl:gap-10">
+              {nav.map((n) => {
+                const current = !n.href.startsWith("#") && pathname.startsWith(n.href);
+                const props = {
+                  className: "link-line text-[15px]",
+                  "aria-current": current ? ("page" as const) : undefined,
+                };
+                return (
+                  <li key={n.href}>
+                    {/* Усередині розділу — клієнтський перехід; між головною та розділом — повне завантаження */}
+                    {base && !n.href.startsWith("#") ? (
+                      <Link href={n.href} {...props}>
+                        {n.label}
+                      </Link>
+                    ) : (
+                      <a href={navHref(n.href, base)} {...props}>
+                        {n.label}
+                      </a>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
@@ -97,7 +119,7 @@ export function Header() {
           </div>
         </div>
       </header>
-      <Menu open={open} onClose={() => setOpen(false)} returnFocus={menuBtn} />
+      <Menu open={open} onClose={() => setOpen(false)} returnFocus={menuBtn} base={base} />
     </>
   );
 }

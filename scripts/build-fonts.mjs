@@ -24,7 +24,7 @@ const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => String.fromC
 const ukrainian = range(0x410, 0x44f) + "ЄєІіЇїҐґЁё’ʼ";
 const latin = range(0x20, 0x7e);
 const typo = "«»„“”‘’—–‑…№₴%‰×·•©®™€$°′″   →←↗";
-const contentChars = ["src/content/uk.ts", "src/config/site.ts"].map((f) => fs.readFileSync(f, "utf8")).join("");
+const contentChars = ["src/content/uk.ts", "src/content/news.ts", "src/config/site.ts"].map((f) => fs.readFileSync(f, "utf8")).join("");
 const textChars = [...new Set([...(ukrainian + latin + typo + contentChars)])].filter((c) => c >= " ").join("");
 // Моно на сайті — лише цифри та службові знаки (номери, лічильники, телефон)
 const monoChars = "0123456789+-−()/.,:%№ " + "\u00a0";
