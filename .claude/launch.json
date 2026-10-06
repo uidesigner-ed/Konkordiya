@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "konkordia-dev",
+      "url": "http://localhost:3100"
+    },
+    {
+      "name": "konkordia-dev-start",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3100,
+      "autoPort": true
+    }
+  ]
+}

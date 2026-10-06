@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# вихідні variable-шрифти для scripts/build-fonts.mjs (завантажуються автоматично)
+/fonts-src
