@@ -19,6 +19,11 @@ import { Experience } from "@/components/sections/Experience";
 import { Team } from "@/components/sections/Team";
 import { Reviews } from "@/components/sections/Reviews";
 import { Contact } from "@/components/sections/Contact";
+import { pageMetadata } from "@/lib/server/seo";
+
+export function generateMetadata() {
+  return pageMetadata("/");
+}
 
 export default function Home() {
   return (

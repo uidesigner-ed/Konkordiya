@@ -23,7 +23,7 @@ export const sections = [
 export type SectionId = (typeof sections)[number]["id"];
 
 export const nav = [
-  { href: "#poslugy", label: "Послуги" },
+  { href: "/poslugy", label: "Послуги" },
   { href: "#suprovid", label: "Супровід" },
   { href: "#dodatkovo", label: "Додатково" },
   { href: "/novyny", label: "Новини" },
@@ -43,6 +43,8 @@ export const content = {
       ] as Rich[],
       plain: "Бухгалтерські рішення для бізнесу від Євгенії Турковської",
     },
+    /** Рядок над заголовком — частина H1 (ключовий запит + бренд) */
+    eyebrow: "Бухгалтерська компанія «Конкордія» · Харків",
     subtitle: "Наведемо лад у фінансах, зменшимо ризики, зекономимо Ваш час.",
     cta: "Отримати консультацію",
     stats: [
@@ -74,6 +76,8 @@ export const content = {
         text: "Надаємо повний бухгалтерський супровід, допомагаємо вести облік доходів і витрат, подавати звітність та оптимізувати податкові платежі.",
         stat: "fop",
         statLabel: "ФОП на супроводі",
+        href: "/poslugy/bukhhalteriia-dlia-fop",
+        link: "Бухгалтерія для ФОП",
       },
       {
         abbr: "ТОВ",
@@ -81,6 +85,8 @@ export const content = {
         text: "Комплексне ведення бухгалтерії та податкової звітності, включно з управлінським обліком, кадровими питаннями та фінансовим контролем.",
         stat: "tov",
         statLabel: "ТОВ на супроводі",
+        href: "/poslugy/bukhhalteriia-dlia-tov",
+        link: "Бухгалтерія для ТОВ",
       },
       {
         abbr: "БФ",
@@ -88,6 +94,8 @@ export const content = {
         text: "Супроводжуємо у веденні обліку, підготовці звітності та контролі цільового використання коштів. Допомагаємо підтримувати прозорість та порядок у документах.",
         stat: "bf",
         statLabel: "БФ на супроводі",
+        href: "/novyny/oblik-blahodiinoho-fondu",
+        link: "Облік благодійного фонду",
       },
     ],
   },
@@ -96,11 +104,11 @@ export const content = {
     title: ["Основні бухгалтерські ", { i: "послуги" }] as Rich,
     more: "Детальніше",
     items: [
-      { title: "Реєстрація ФОП та юридичних осіб", icon: "register" },
-      { title: "Податковий облік та подання звітності", icon: "report" },
-      { title: "Ведення бухгалтерського обліку для ФОП та ТОВ", icon: "ledger" },
-      { title: "Супровід під час перевірок контролюючих органів", icon: "audit" },
-      { title: "Нарахування заробітної плати та кадровий облік", icon: "payroll" },
+      { title: "Реєстрація ФОП та юридичних осіб", icon: "register", href: "/poslugy/bukhhalteriia-dlia-fop#reiestratsiia" },
+      { title: "Податковий облік та подання звітності", icon: "report", href: "/poslugy/podatkovyi-oblik-i-zvitnist" },
+      { title: "Ведення бухгалтерського обліку для ФОП та ТОВ", icon: "ledger", href: "/poslugy/bukhhalterskyi-autsorsynh" },
+      { title: "Супровід під час перевірок контролюючих органів", icon: "audit", href: "/poslugy/podatkovyi-oblik-i-zvitnist#perevirky" },
+      { title: "Нарахування заробітної плати та кадровий облік", icon: "payroll", href: "/poslugy/kadrovyi-oblik" },
     ],
   },
 

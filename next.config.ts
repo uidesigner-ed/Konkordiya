@@ -1,9 +1,13 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Односторінковий лендінг: CSS у <head> замість блокуючого запиту
+  // Корінь проєкту — ця тека (інакше Turbopack шукає lock-файли вище за деревом)
+  turbopack: { root: path.join(__dirname) },
+  // inlineCss вимкнено: Next дублює вбудований CSS ще й у RSC-даних сторінки (×3 до ваги HTML),
+  // окремий кешований файл стилів виходить швидшим (заміри Lighthouse, жовтень 2026)
   experimental: {
-    inlineCss: true,
+    inlineCss: false,
   },
   images: {
     // WebP кодується в рази швидше за AVIF — перший показ фото без затримки оптимізатора

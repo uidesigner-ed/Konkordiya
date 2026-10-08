@@ -8,6 +8,13 @@ import { site } from "@/config/site";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { messengerItems } from "@/components/ui/SocialLinks";
 import { IconArrow, IconMail, IconPhone, IconPin } from "@/components/ui/Icons";
+import dynamic from "next/dynamic";
+
+// Форма — у самому низу сторінки: її код вантажимо після першого екрана
+const LeadForm = dynamic(() => import("@/components/forms/LeadForm").then((m) => m.LeadForm), {
+  ssr: false,
+  loading: () => <div className="lead-placeholder" aria-hidden />,
+});
 
 /** Фінальний заклик: месенджери як велика панель + контакти рядками реєстру. */
 export function Contact() {
@@ -65,26 +72,35 @@ export function Contact() {
         ))}
       </ul>
 
-      <dl className="contact-details">
-        {details.map(({ label, value, href, Icon, mono, external }) => (
-          <div key={label} className="contact-row">
-            <span className="contact-line" aria-hidden />
-            <dt className="contact-row__label">
-              <Icon size={20} />
-              {label}
-            </dt>
-            <dd>
-              <a
-                href={href}
-                className={`contact-row__value link-line ${mono ? "t-mono" : ""}`}
-                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              >
-                {value}
-              </a>
-            </dd>
-          </div>
-        ))}
-      </dl>
+      <div className="contact-bottom">
+        <dl className="contact-details">
+          {details.map(({ label, value, href, Icon, mono, external }) => (
+            <div key={label} className="contact-row">
+              <span className="contact-line" aria-hidden />
+              <dt className="contact-row__label">
+                <Icon size={20} />
+                {label}
+              </dt>
+              <dd>
+                <a
+                  href={href}
+                  className={`contact-row__value link-line ${mono ? "t-mono" : ""}`}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                >
+                  {value}
+                </a>
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <div className="contact-form" data-track-zone="home-contact">
+          <h3 className="contact-form__title t-display">
+            Або залиште <span className="ital">заявку</span>
+          </h3>
+          <p className="contact-form__text">Передзвонимо або напишемо у зручний для вас месенджер.</p>
+          <LeadForm location="home" />
+        </div>
+      </div>
     </section>
   );
 }

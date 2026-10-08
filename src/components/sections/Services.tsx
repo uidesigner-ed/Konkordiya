@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { useFx } from "@/lib/fx";
 import { MQ } from "@/lib/motion";
 import { content } from "@/content/uk";
-import { site } from "@/config/site";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { IconArrow, serviceIcons } from "@/components/ui/Icons";
 
@@ -77,14 +76,7 @@ export function Services() {
           return (
             <li key={it.title} className="svc-row">
               <span className="svc-row__rule" aria-hidden />
-              <a
-                href={site.consultUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="svc-row__link"
-                data-cursor={s.more}
-                aria-label={`${it.title} — ${s.more.toLowerCase()} у Telegram`}
-              >
+              <a href={it.href} className="svc-row__link" data-cursor={s.more}>
                 <span className="svc-row__num t-mono">{String(i + 1).padStart(2, "0")}</span>
                 <span className="svc-row__title t-display">
                   <span className="svc-row__title-in">{it.title}</span>

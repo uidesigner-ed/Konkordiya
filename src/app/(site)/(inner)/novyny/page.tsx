@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
 import { site } from "@/config/site";
 import { newsUi } from "@/content/news";
-import { allArticles, articleHref, categoryCounts, formatDateNum, getPopular, NEWS_PATH, plural, searchText } from "@/lib/news";
+import { articleHref, articleNumber, categoryCounts, formatDateNum, getPopular, NEWS_PATH, plural, searchText } from "@/lib/news";
+import { getPublishedArticles } from "@/lib/server/articles";
+import { pageMetadata } from "@/lib/server/seo";
 import { Breadcrumbs } from "@/components/news/Breadcrumbs";
 import { NewsCard } from "@/components/news/NewsCard";
 import { NewsIndex } from "@/components/news/NewsIndex";
@@ -9,24 +10,12 @@ import { PopularList } from "@/components/news/NewsLists";
 import { NewsCta } from "@/components/news/NewsCta";
 import { NewsFx } from "@/components/news/NewsFx";
 
-export const metadata: Metadata = {
-  title: newsUi.metaTitle,
-  description: newsUi.metaDescription,
-  alternates: { canonical: NEWS_PATH },
-  openGraph: {
-    type: "website",
-    locale: site.locale,
-    url: `${site.url}${NEWS_PATH}`,
-    siteName: site.name,
-    title: newsUi.metaTitle,
-    description: newsUi.metaDescription,
-    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: newsUi.metaTitle }],
-  },
-  twitter: { card: "summary_large_image", title: newsUi.metaTitle, description: newsUi.metaDescription, images: ["/og.jpg"] },
-};
+export function generateMetadata() {
+  return pageMetadata(NEWS_PATH);
+}
 
-export default function NewsPage() {
-  const list = allArticles;
+export default async function NewsPage() {
+  const list = await getPublishedArticles();
   const [latest] = list;
   const total = list.length;
 
@@ -67,7 +56,11 @@ export default function NewsPage() {
             <span>
               {plural(total, ["матеріал", "матеріали", "матеріалів"])}
               <br />
-              {newsUi.updated.toLowerCase()} <span className="t-mono">{formatDateNum(latest.date)}</span>
+              {latest && (
+                <>
+                  {newsUi.updated.toLowerCase()} <span className="t-mono">{formatDateNum(latest.date)}</span>
+                </>
+              )}
             </span>
           </p>
         </div>
@@ -76,10 +69,10 @@ export default function NewsPage() {
 
       <NewsIndex
         items={list.map((a) => ({ slug: a.slug, category: a.category, search: searchText(a) }))}
-        categories={categoryCounts()}
-        featured={<NewsCard a={latest} variant="featured" uid={`f-${latest.slug}`} />}
-        cards={Object.fromEntries(list.map((a) => [a.slug, <NewsCard key={a.slug} a={a} />]))}
-        aside={<PopularList items={getPopular()} />}
+        categories={categoryCounts(list)}
+        featured={latest && <NewsCard a={latest} n={articleNumber(list, latest.slug)} variant="featured" uid={`f-${latest.slug}`} />}
+        cards={Object.fromEntries(list.map((a) => [a.slug, <NewsCard key={a.slug} a={a} n={articleNumber(list, a.slug)} />]))}
+        aside={<PopularList items={getPopular(list)} />}
       />
 
       <NewsCta />

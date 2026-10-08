@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import { useFx } from "@/lib/fx";
 import { MQ } from "@/lib/motion";
 import { content, nav, navHref } from "@/content/uk";
 import { site } from "@/config/site";
 import { SocialLinks } from "@/components/ui/SocialLinks";
+import { serviceNav, serviceHref } from "@/content/service-nav";
 
 /** Футер: слоган, навігація та величезний «КОНКОРДІЯ», що підводиться з-під лінії. */
 export function Footer({ base = "" }: { base?: string }) {
@@ -92,6 +94,25 @@ export function Footer({ base = "" }: { base?: string }) {
         </nav>
       </div>
 
+      <nav aria-label="Послуги" className="footer-services">
+        <p className="footer-services__title">Послуги</p>
+        <ul>
+          {serviceNav.map((sv) => (
+            <li key={sv.slug}>
+              {base ? (
+                <Link href={serviceHref(sv.slug)} className="link-line">
+                  {sv.nav}
+                </Link>
+              ) : (
+                <a href={serviceHref(sv.slug)} className="link-line">
+                  {sv.nav}
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
+      </nav>
+
       <div className="footer-word-wrap">
         <p ref={word} className="footer-word t-display">
           <span className="sr-only">{site.name}</span>
@@ -109,6 +130,9 @@ export function Footer({ base = "" }: { base?: string }) {
         <a href={site.privacyUrl} target="_blank" rel="noopener" className="link-line">
           {f.privacy}
         </a>
+        <button type="button" className="link-line footer-cookie" onClick={() => window.dispatchEvent(new Event("konk:consent-open"))}>
+          Налаштування cookies
+        </button>
         <a href={base ? "#main" : "#top"} className="link-line">
           {f.toTop}
         </a>

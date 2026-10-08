@@ -194,7 +194,10 @@ export function Hero() {
         />
       </div>
 
-      <h1 id="hero-title" className="hero__title t-display" aria-label={h.title.plain}>
+      <h1 id="hero-title" className="hero__title t-display" aria-label={`${h.eyebrow}. ${h.title.plain}`}>
+        <span className="hero__eyebrow" aria-hidden>
+          {h.eyebrow}
+        </span>
         {/* Символи першого рядка рендеряться на сервері: вони малюються вже на FCP (LCP не «переїжджає» на інтро) */}
         <span className="hero__line hero__line--1" aria-hidden>
           {Array.from("Бухгалтерські").map((ch, i) => (

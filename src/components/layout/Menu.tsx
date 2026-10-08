@@ -113,28 +113,39 @@ export function Menu({
                   </m.a>
                 </li>
               ))}
-              <li className="menu__item">
-                <m.div
-                  initial={{ y: "110%" }}
-                  animate={{ y: "0%" }}
-                  exit={{ y: "-110%", transition: { duration: 0.4, ease: EASE_PANEL } }}
-                  transition={{ delay: 0.28 + sections.length * 0.035, duration: 0.9, ease: EASE_OUT }}
-                >
-                  {base ? (
-                    <Link href="/novyny" onClick={onClose} className="menu__link">
-                      <span className="menu__num t-mono">{String(sections.length + 1).padStart(2, "0")}</span>
-                      <span className="menu__label">{newsUi.navLabel}</span>
-                    </Link>
-                  ) : (
-                    // З головної — повне завантаження: у розділу власний макет без прелоадера й WebGL
-                    // eslint-disable-next-line @next/next/no-html-link-for-pages
-                    <a href="/novyny" className="menu__link">
-                      <span className="menu__num t-mono">{String(sections.length + 1).padStart(2, "0")}</span>
-                      <span className="menu__label">{newsUi.navLabel}</span>
-                    </a>
-                  )}
-                </m.div>
-              </li>
+              {[
+                { href: "/poslugy", label: "Усі послуги" },
+                { href: "/novyny", label: newsUi.navLabel },
+              ].map((l, k) => {
+                const num = String(sections.length + k + 1).padStart(2, "0");
+                const inner = (
+                  <>
+                    <span className="menu__num t-mono">{num}</span>
+                    <span className="menu__label">{l.label}</span>
+                  </>
+                );
+                return (
+                  <li key={l.href} className="menu__item">
+                    <m.div
+                      initial={{ y: "110%" }}
+                      animate={{ y: "0%" }}
+                      exit={{ y: "-110%", transition: { duration: 0.4, ease: EASE_PANEL } }}
+                      transition={{ delay: 0.28 + (sections.length + k) * 0.035, duration: 0.9, ease: EASE_OUT }}
+                    >
+                      {base ? (
+                        <Link href={l.href} onClick={onClose} className="menu__link">
+                          {inner}
+                        </Link>
+                      ) : (
+                        // З головної — повне завантаження: у розділів власний макет без прелоадера й WebGL
+                        <a href={l.href} className="menu__link">
+                          {inner}
+                        </a>
+                      )}
+                    </m.div>
+                  </li>
+                );
+              })}
             </ol>
           </nav>
 

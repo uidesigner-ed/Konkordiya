@@ -1,17 +1,14 @@
-import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { site } from "@/config/site";
-import { newsUi } from "@/content/news";
+import { newsUi, type Article } from "@/content/news";
 import {
-  allArticles,
   articleHref,
   articleNumber,
+  categoryCounts,
   categoryHref,
   categoryLabel,
   formatDate,
   getAdjacent,
-  getArticle,
   getLatest,
   getPopular,
   getRelated,
@@ -22,64 +19,28 @@ import {
 import { LogoMark } from "@/components/ui/LogoMark";
 import { IconArrowRight } from "@/components/ui/Icons";
 import { RichText } from "@/components/ui/RichText";
-import { Breadcrumbs } from "@/components/news/Breadcrumbs";
-import { NewsCover } from "@/components/news/NewsCover";
-import { NewsCard } from "@/components/news/NewsCard";
-import { ArticleBody } from "@/components/news/ArticleBody";
-import { ArticleToc } from "@/components/news/ArticleToc";
-import { ShareButtons } from "@/components/news/ShareButtons";
-import { ReadingProgress } from "@/components/news/ReadingProgress";
-import { CategoryList, LatestList, PopularList } from "@/components/news/NewsLists";
-import { NewsCta } from "@/components/news/NewsCta";
-import { NewsFx } from "@/components/news/NewsFx";
+import { Breadcrumbs } from "./Breadcrumbs";
+import { NewsCover } from "./NewsCover";
+import { NewsCard } from "./NewsCard";
+import { ArticleBody } from "./ArticleBody";
+import { ArticleToc } from "./ArticleToc";
+import { ShareButtons } from "./ShareButtons";
+import { ReadingProgress } from "./ReadingProgress";
+import { CategoryList, LatestList, PopularList } from "./NewsLists";
+import { NewsCta } from "./NewsCta";
+import { NewsFx } from "./NewsFx";
 
-type Props = { params: Promise<{ slug: string }> };
-
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return allArticles.map((a) => ({ slug: a.slug }));
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const a = getArticle(slug);
-  if (!a) return {};
-  const url = `${site.url}${articleHref(a.slug)}`;
-  const title = `${a.title} — ${site.name}`;
-  return {
-    title,
-    description: a.excerpt,
-    alternates: { canonical: articleHref(a.slug) },
-    authors: [{ name: a.author }],
-    keywords: a.tags,
-    openGraph: {
-      type: "article",
-      locale: site.locale,
-      url,
-      siteName: site.name,
-      title,
-      description: a.excerpt,
-      publishedTime: a.date,
-      modifiedTime: a.updated ?? a.date,
-      section: categoryLabel(a.category),
-      tags: a.tags,
-      images: [{ url: "/og.jpg", width: 1200, height: 630, alt: a.title }],
-    },
-    twitter: { card: "summary_large_image", title, description: a.excerpt, images: ["/og.jpg"] },
-  };
-}
-
-export default async function ArticlePage({ params }: Props) {
-  const { slug } = await params;
-  const a = getArticle(slug);
-  if (!a) notFound();
-
+/**
+ * Сторінка статті. list — опубліковані статті (для «Нові», «Популярні», навігації та «Читайте також»).
+ * preview — перегляд чернетки в адмінці (без розмітки schema.org).
+ */
+export function ArticleView({ a, list, preview = false }: { a: Article; list: Article[]; preview?: boolean }) {
   const url = `${site.url}${articleHref(a.slug)}`;
   const minutes = readingTime(a);
   const contents = toc(a);
-  const { prev, next } = getAdjacent(a.slug);
-  const related = getRelated(a);
+  const { prev, next } = getAdjacent(list, a.slug);
+  const related = getRelated(list, a);
+  const n = articleNumber(list, a.slug);
 
   const ld = {
     "@context": "https://schema.org",
@@ -152,8 +113,8 @@ export default async function ArticlePage({ params }: Props) {
         <figure className="art-cover page-x">
           <div className="art-cover__frame">
             <div className="art-cover__inner">
-              <NewsCover cover={a.cover} n={articleNumber(a.slug)} uid={`hw-${a.slug}`} wide className="ncv--wide" />
-              <NewsCover cover={a.cover} n={articleNumber(a.slug)} uid={`hn-${a.slug}`} className="ncv--narrow" />
+              <NewsCover cover={a.cover} n={n} uid={`hw-${a.slug}`} wide className="ncv--wide" />
+              <NewsCover cover={a.cover} n={n} uid={`hn-${a.slug}`} className="ncv--narrow" />
             </div>
           </div>
         </figure>
@@ -212,9 +173,9 @@ export default async function ArticlePage({ params }: Props) {
 
           <aside className="art-side" aria-label="Інші матеріали">
             <div className="art-side__sticky">
-              <LatestList items={getLatest(a.slug, 3)} />
-              <PopularList items={getPopular(a.slug, 4)} />
-              <CategoryList current={a.category} />
+              <LatestList items={getLatest(list, a.slug, 3)} />
+              <PopularList items={getPopular(list, a.slug, 4)} />
+              <CategoryList counts={categoryCounts(list)} current={a.category} />
             </div>
           </aside>
         </div>
@@ -272,13 +233,13 @@ export default async function ArticlePage({ params }: Props) {
         <div className="art-related__grid">
           {related.map((r) => (
             <div key={r.slug} data-reveal>
-              <NewsCard a={r} level={3} uid={`rel-${r.slug}`} />
+              <NewsCard a={r} n={articleNumber(list, r.slug)} level={3} uid={`rel-${r.slug}`} />
             </div>
           ))}
         </div>
       </section>
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
+      {!preview && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />}
     </>
   );
 }

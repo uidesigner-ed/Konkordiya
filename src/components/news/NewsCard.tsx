@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Article } from "@/content/news";
 import { newsUi } from "@/content/news";
-import { articleHref, articleNumber, categoryLabel, formatDate, formatDateNum, readingTime } from "@/lib/news";
+import { articleHref, categoryLabel, formatDate, formatDateNum, readingTime } from "@/lib/news";
 import { IconArrow } from "@/components/ui/Icons";
 import { NewsCover } from "./NewsCover";
 
@@ -13,17 +13,19 @@ type Variant = "default" | "featured" | "compact";
  */
 export function NewsCard({
   a,
+  n,
   variant = "default",
   level = 2,
   uid,
 }: {
   a: Article;
+  /** Номер статті в журналі («07») */
+  n: string;
   variant?: Variant;
   level?: 2 | 3;
   uid?: string;
 }) {
   const H = level === 2 ? "h2" : "h3";
-  const n = articleNumber(a.slug);
   return (
     <article className={`ncard ncard--${variant}`} data-cursor={newsUi.read}>
       <div className="ncard__media">

@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Cursor } from "@/components/ui/Cursor";
 import { InnerPage } from "@/components/news/InnerPage";
+import "@/styles/inner.css";
 
 /** Оболонка розділу «Новини»: та сама шапка, поле книги й футер, без прелоадера */
 export default function NewsLayout({ children }: { children: React.ReactNode }) {

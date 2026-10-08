@@ -8,6 +8,12 @@ import { SectionHead } from "@/components/ui/SectionHead";
 import { IconTick } from "@/components/ui/Icons";
 
 /** Додаткові послуги — список звірки: галочки ставляться одна за одною, внизу «Разом». */
+/** Додаткові послуги з власними сторінками */
+const extraLinks: Record<string, string> = {
+  "Відновлення бухгалтерського обліку": "/poslugy/vidnovlennia-obliku",
+  "Аутсорсинг бухгалтерії для бізнесу": "/poslugy/bukhhalterskyi-autsorsynh",
+};
+
 export function Extra() {
   const root = useRef<HTMLElement>(null);
   const e = content.extra;
@@ -45,7 +51,15 @@ export function Extra() {
             <li key={t} className="extra-item">
               <span className="extra-item__rule" aria-hidden />
               <IconTick className="extra-item__tick" size={34} />
-              <span className="extra-item__text">{t}</span>
+              <span className="extra-item__text">
+                {extraLinks[t] ? (
+                  <a href={extraLinks[t]} className="link-line">
+                    {t}
+                  </a>
+                ) : (
+                  t
+                )}
+              </span>
             </li>
           ))}
         </ul>

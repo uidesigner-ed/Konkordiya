@@ -5,6 +5,7 @@ import { useFx } from "@/lib/fx";
 import { MQ } from "@/lib/motion";
 import { content } from "@/content/uk";
 import { stats } from "@/config/site";
+import { IconArrow } from "@/components/ui/Icons";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Counter } from "@/components/ui/Counter";
 
@@ -63,7 +64,13 @@ export function Audiences() {
                   </span>
                   <span className="reg-row__name ital">{it.name}</span>
                 </th>
-                <td className="reg-row__text">{it.text}</td>
+                <td className="reg-row__text">
+                  {it.text}
+                  <a href={it.href} className="reg-row__link link-line">
+                    {it.link}
+                    <IconArrow size={14} />
+                  </a>
+                </td>
                 <td className="reg-row__stat">
                   <span className="reg-row__num t-mono">
                     <Counter value={s.value} suffix={s.suffix} className="total" />

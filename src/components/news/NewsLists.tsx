@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { Article } from "@/content/news";
 import { newsUi } from "@/content/news";
-import { articleHref, categoryCounts, categoryHref, categoryLabel, formatDateNum, readingTime } from "@/lib/news";
+import { articleHref, categoryHref, categoryLabel, formatDateNum, readingTime } from "@/lib/news";
+import type { CategoryId } from "@/content/news";
 
 /** «Популярне»: нумерований список, як підсумковий стовпчик у книзі обліку */
 export function PopularList({ items, title = newsUi.popular }: { items: Article[]; title?: string }) {
@@ -57,16 +58,16 @@ export function LatestList({ items }: { items: Article[] }) {
 }
 
 /** Категорії з лічильниками → стрічка з фільтром */
-export function CategoryList({ current }: { current?: string }) {
+export function CategoryList({ counts, current }: { counts: { id: string; label: string; count: number }[]; current?: string }) {
   return (
     <section className="nlist nlist--cats" aria-labelledby="nlist-cats">
       <h2 id="nlist-cats" className="nlist__title">
         {newsUi.filter}
       </h2>
       <ul className="ncats">
-        {categoryCounts().map((c) => (
+        {counts.map((c) => (
           <li key={c.id}>
-            <Link href={categoryHref(c.id)} className="nchip" aria-current={c.id === current ? "true" : undefined}>
+            <Link href={categoryHref(c.id as CategoryId)} className="nchip" aria-current={c.id === current ? "true" : undefined}>
               {c.label}
               <sup className="t-mono">{c.count}</sup>
             </Link>
