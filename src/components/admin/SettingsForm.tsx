@@ -28,6 +28,42 @@ export function SettingsForm({ value }: { value: SiteSettings }) {
           </Field>
         </div>
         <Field
+          label="Google Ads — тег"
+          error={e.googleAdsId}
+          hint="Google Ads → Інструменти → Менеджер даних → Тег Google → «AW-…». Події заявок і кліків передаються і сюди."
+        >
+          <input name="googleAdsId" defaultValue={value.googleAdsId} placeholder="AW-XXXXXXXXXX" className="adm-mono" />
+        </Field>
+        <p className="adm-muted">
+          Мітки конверсій Google Ads. Цілі → Конверсії → конверсія → «Налаштування тегу» → «Установити самостійно»: скопіюйте з
+          фрагмента події значення send_to (можна вставити весь фрагмент). Порожнє поле — конверсія для цієї дії не надсилається.
+          Не створюйте для тих самих дій ще й конверсії «перегляд сторінки» чи імпорт із GA4 як основні — буде подвійний облік.
+        </p>
+        <div className="ed-row">
+          <Field label="Заявка з форми (generate_lead)" error={e.adsLabelLead}>
+            <input name="adsLabelLead" defaultValue={value.adsLabelLead} placeholder="AbCdEfGhIj123" className="adm-mono" />
+          </Field>
+          <Field label="Дзвінок (click_call)" error={e.adsLabelCall}>
+            <input name="adsLabelCall" defaultValue={value.adsLabelCall} placeholder="AbCdEfGhIj123" className="adm-mono" />
+          </Field>
+        </div>
+        <div className="ed-row">
+          <Field label="Telegram (click_messenger, лише Telegram)" error={e.adsLabelTelegram}>
+            <input name="adsLabelTelegram" defaultValue={value.adsLabelTelegram} placeholder="AbCdEfGhIj123" className="adm-mono" />
+          </Field>
+          <Field label="Пошта (click_email)" error={e.adsLabelEmail}>
+            <input name="adsLabelEmail" defaultValue={value.adsLabelEmail} placeholder="AbCdEfGhIj123" className="adm-mono" />
+          </Field>
+        </div>
+        <div className="ed-row">
+          <Field label="WhatsApp (click_messenger, лише WhatsApp)" error={e.adsLabelWhatsapp}>
+            <input name="adsLabelWhatsapp" defaultValue={value.adsLabelWhatsapp} placeholder="AbCdEfGhIj123" className="adm-mono" />
+          </Field>
+          <Field label="Instagram (click_messenger, лише Instagram)" error={e.adsLabelInstagram}>
+            <input name="adsLabelInstagram" defaultValue={value.adsLabelInstagram} placeholder="AbCdEfGhIj123" className="adm-mono" />
+          </Field>
+        </div>
+        <Field
           label="Google Search Console — підтвердження власника"
           error={e.gscVerification}
           hint="Search Console → Додати ресурс → «Тег HTML»: вставте весь мета-тег або лише значення content"

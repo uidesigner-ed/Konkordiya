@@ -16,6 +16,9 @@ export function StatusSelect({
 }) {
   return (
     <select
+      // Після серверної дії React скидає форму до початкового defaultValue — без key список
+      // візуально повертався до старого значення; key перестворює його з новим значенням із сервера
+      key={value}
       name={name}
       defaultValue={value}
       aria-label={label}

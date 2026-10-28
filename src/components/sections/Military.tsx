@@ -125,7 +125,8 @@ export function Military() {
           </p>
           <div className="mil-cta">
             <p className="mil-cta__text">{m.cta}</p>
-            <Button href={site.consultUrl} variant="light" size="lg" cursor={m.button}>
+            {/* У боті одразу обрано послугу «Допомога військовим» */}
+            <Button href={`${site.consultUrl}?start=s_military`} variant="light" size="lg" cursor={m.button}>
               {m.button}
             </Button>
           </div>

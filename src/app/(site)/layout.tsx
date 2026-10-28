@@ -93,6 +93,15 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <TrackingLoader
         ga4Id={s.ga4Id}
         gtmId={s.gtmId}
+        adsId={s.googleAdsId}
+        adsLabels={{
+          generate_lead: s.adsLabelLead,
+          click_call: s.adsLabelCall,
+          "click_messenger:telegram": s.adsLabelTelegram,
+          "click_messenger:whatsapp": s.adsLabelWhatsapp,
+          "click_messenger:instagram": s.adsLabelInstagram,
+          click_email: s.adsLabelEmail,
+        }}
         pixelId={s.metaPixelId}
         customHead={s.customHead}
         customBody={s.customBody}

@@ -26,14 +26,18 @@ export const site = {
   },
 
   social: {
-    telegram: "https://t.me/tyrkevgen",
+    // Усі кнопки Telegram ведуть у бота заявок (сценарій — src/lib/server/bot.ts)
+    telegram: "https://t.me/konkordiya_bot",
     whatsapp: "https://wa.me/380639681987",
     instagram: "https://www.instagram.com/tyrkevgen_buh_kh",
     linkedin: "https://www.linkedin.com/in/%D1%94%D0%B2%D0%B3%D0%B5%D0%BD%D1%96%D1%8F-%D1%82%D1%83%D1%80%D0%BA%D0%BE%D0%B2%D1%81%D1%8C%D0%BA%D0%B0-557366419/",
   },
 
   /** Куди ведуть кнопки «Отримати консультацію», «Детальніше», «Написати» */
-  consultUrl: "https://t.me/tyrkevgen",
+  consultUrl: "https://t.me/konkordiya_bot",
+
+  /** Telegram-бот заявок */
+  telegramBot: "konkordiya_bot",
 
   /** «Більше відгуків» — картка компанії в Google Maps */
   reviewsUrl:
@@ -72,33 +76,21 @@ export const team: {
   {
     src: "/images/team-archive.jpg",
     alt: "Дві співробітниці з робочими папками біля стелажа з документами",
-    people: [
-      { name: "Ім’я Прізвище", role: "Посада" }, // TODO
-      { name: "Ім’я Прізвище", role: "Посада" }, // TODO
-    ],
+    people: [], // TODO: імена та посади
   },
   {
     src: "/images/team-desk.jpg",
     alt: "Дві співробітниці за робочим столом в офісі",
-    people: [
-      { name: "Ім’я Прізвище", role: "Посада" }, // TODO
-      { name: "Ім’я Прізвище", role: "Посада" }, // TODO
-    ],
+    people: [], // TODO: імена та посади
   },
   {
     src: "/images/team-office.jpg",
     alt: "Дві співробітниці в офісі «Конкордії»",
-    people: [
-      { name: "Ім’я Прізвище", role: "Посада" }, // TODO
-      { name: "Ім’я Прізвище", role: "Посада" }, // TODO
-    ],
+    people: [], // TODO: імена та посади
   },
   {
     src: "/images/team-shelves.jpg",
     alt: "Дві співробітниці біля стелажів з архівом",
-    people: [
-      { name: "Ім’я Прізвище", role: "Посада" }, // TODO
-      { name: "Ім’я Прізвище", role: "Посада" }, // TODO
-    ],
+    people: [], // TODO: імена та посади
   },
 ];

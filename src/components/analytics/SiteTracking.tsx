@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
-import { linkEvent, track } from "@/lib/track";
+import { linkEvent, setAdsConversions, track } from "@/lib/track";
+import { isBotLink, prepareBotLink } from "@/lib/bot-link";
 
 /**
  * Аналітика й теги клієнта:
- *  • Google tag (GA4) та/або Google Tag Manager — із Consent Mode v2 (до згоди — без cookies);
+ *  • Google tag (GA4, Google Ads) та/або Google Tag Manager — із Consent Mode v2 (до згоди — без cookies);
  *  • Meta Pixel — лише після згоди;
  *  • довільний код клієнта (head / body) — одразу або після згоди (налаштування в адмінці);
  *  • відстеження натискань на телефон, месенджери, пошту (lib/track.ts).
@@ -55,8 +56,9 @@ function addScript(src: string) {
 const GRANTED = { ad_storage: "granted", ad_user_data: "granted", ad_personalization: "granted", analytics_storage: "granted" };
 const DENIED = { ad_storage: "denied", ad_user_data: "denied", ad_personalization: "denied", analytics_storage: "denied" };
 
-function initGoogle(ga4Id: string, gtmId: string, granted: boolean) {
-  if (!ga4Id && !gtmId) return;
+function initGoogle(ga4Id: string, adsId: string, gtmId: string, granted: boolean) {
+  const tagId = ga4Id || adsId;
+  if (!tagId && !gtmId) return;
   window.dataLayer = window.dataLayer || [];
   window.gtag = function gtag() {
     // eslint-disable-next-line prefer-rest-params -- gtag очікує саме arguments
@@ -64,12 +66,14 @@ function initGoogle(ga4Id: string, gtmId: string, granted: boolean) {
   };
   window.gtag("consent", "default", { ...DENIED, wait_for_update: 500 });
   if (granted) window.gtag("consent", "update", GRANTED);
-  if (ga4Id) {
+  if (tagId) {
     window.gtag("js", new Date());
-    window.gtag("config", ga4Id);
+    if (ga4Id) window.gtag("config", ga4Id);
+    if (adsId) window.gtag("config", adsId);
   }
   whenIdle(() => {
-    if (ga4Id) addScript(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(ga4Id)}`);
+    // Один gtag.js обслуговує всі ідентифікатори, підключені через config
+    if (tagId) addScript(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(tagId)}`);
     if (gtmId) {
       window.dataLayer!.push({ "gtm.start": Date.now(), event: "gtm.js" });
       addScript(`https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(gtmId)}`);
@@ -108,6 +112,8 @@ function injectHtml(html: string, where: "head" | "body") {
 
 export function SiteTracking({
   ga4Id,
+  adsId,
+  adsLabels,
   gtmId,
   pixelId,
   customHead,
@@ -116,6 +122,9 @@ export function SiteTracking({
   privacyUrl,
 }: {
   ga4Id: string;
+  adsId: string;
+  /** Подія → мітка конверсії Google Ads (порожня — конверсія не надсилається) */
+  adsLabels: Record<string, string>;
   gtmId: string;
   pixelId: string;
   customHead: string;
@@ -129,8 +138,14 @@ export function SiteTracking({
   const started = useRef({ google: false, pixel: false, custom: false });
   const firstPath = useRef(pathname);
 
+  useEffect(() => {
+    setAdsConversions(
+      adsId ? Object.fromEntries(Object.entries(adsLabels).filter(([, l]) => l).map(([e, l]) => [e, `${adsId}/${l}`])) : {},
+    );
+  }, [adsId, adsLabels]);
+
   const hasCustom = !!(customHead.trim() || customBody.trim());
-  const needsConsent = !!(ga4Id || gtmId || pixelId || (hasCustom && customConsent));
+  const needsConsent = !!(ga4Id || adsId || gtmId || pixelId || (hasCustom && customConsent));
 
   // Google — одразу (у режимі «відмова» до згоди); Pixel і теги з вимогою згоди — після неї
   useEffect(() => {
@@ -138,7 +153,7 @@ export function SiteTracking({
     const st = started.current;
     if (!st.google) {
       st.google = true;
-      initGoogle(ga4Id, gtmId, consent === "granted");
+      initGoogle(ga4Id, adsId, gtmId, consent === "granted");
     } else if (window.gtag) {
       window.gtag("consent", "update", consent === "granted" ? GRANTED : DENIED);
     }
@@ -154,7 +169,7 @@ export function SiteTracking({
         injectHtml(customBody, "body");
       });
     }
-  }, [consent, ga4Id, gtmId, pixelId, customHead, customBody, customConsent, hasCustom]);
+  }, [consent, ga4Id, adsId, gtmId, pixelId, customHead, customBody, customConsent, hasCustom]);
 
   // Перегляд сторінки для Pixel при клієнтських переходах (GA4 рахує їх сам — «розширені вимірювання»)
   useEffect(() => {
@@ -177,13 +192,15 @@ export function SiteTracking({
     const onClick = (e: MouseEvent) => {
       const a = (e.target as Element | null)?.closest?.("a[href]");
       if (!a) return;
+      // Кнопка Telegram → бот: ключ візиту для джерела заявки й GA4
+      if (a instanceof HTMLAnchorElement && isBotLink(a.href)) prepareBotLink(a, ga4Id);
       const ev = linkEvent(a.getAttribute("href") ?? "");
       if (!ev) return;
       track(ev.event, { ...ev.params, link_location: a.closest("[data-track-zone]")?.getAttribute("data-track-zone") ?? pathname }, ev.meta);
     };
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);
-  }, [pathname]);
+  }, [pathname, ga4Id]);
 
   // Посилання «Налаштування cookies» у футері
   useEffect(() => {

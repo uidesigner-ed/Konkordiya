@@ -3074,6 +3074,8 @@ html[data-tracking] .footer-cookie {
 }
 .lead__field {
   display: grid;
+  /* Помилка під сусіднім полем подовжує рядок — вміст не розтягується, а лишається вгорі */
+  align-content: start;
   gap: 8px;
   min-width: 0;
   border: 0;
@@ -3131,11 +3133,17 @@ html[data-tracking] .footer-cookie {
   border-color: var(--red);
   box-shadow: 0 0 0 1px var(--red);
 }
-.lead [aria-invalid="true"] {
+/* Помилка поля: червона рамка й легка заливка — помітніше за звичайний фокус.
+   Через .lead__field — інакше правило слабше за «.lead input[type=…]» і рамка не з’являється */
+.lead .lead__field [aria-invalid="true"] {
   border-color: var(--red-ink);
+  box-shadow: 0 0 0 1px var(--red-ink);
+  background-color: rgb(226 85 44 / 0.06);
 }
-.lead--dark [aria-invalid="true"] {
-  border-color: var(--red);
+.lead--dark .lead__field [aria-invalid="true"] {
+  border-color: #ff9a7a;
+  box-shadow: 0 0 0 1px #ff9a7a;
+  background-color: rgb(255 154 122 / 0.08);
 }
 .lead__chips {
   display: flex;

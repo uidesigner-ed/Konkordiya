@@ -17,6 +17,13 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
 
   const checks = [
     { ok: !!(s.ga4Id || s.gtmId), label: "Google Analytics 4 / Google Tag Manager", hint: s.ga4Id || s.gtmId },
+    { ok: !!s.googleAdsId, label: "Google Ads", hint: s.googleAdsId },
+    {
+      // Головні звернення — дзвінок і Telegram; решта міток додаються за потреби
+      ok: !!(s.adsLabelCall && s.adsLabelTelegram),
+      label: "Конверсії Google Ads (заявка, дзвінок, Telegram, WhatsApp, Instagram, пошта)",
+      hint: `${[s.adsLabelLead, s.adsLabelCall, s.adsLabelTelegram, s.adsLabelWhatsapp, s.adsLabelInstagram, s.adsLabelEmail].filter(Boolean).length} з 6 міток`,
+    },
     { ok: !!s.metaPixelId, label: "Meta Pixel", hint: s.metaPixelId },
     { ok: !!s.gscVerification, label: "Google Search Console (мета-тег підтвердження)", hint: s.gscVerification ? "додано" : "" },
     { ok: !s.noindexSite, label: "Сайт відкритий для індексації", hint: s.noindexSite ? "закрито в налаштуваннях" : "" },

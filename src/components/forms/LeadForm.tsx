@@ -1,12 +1,13 @@
 "use client";
 
-import { startTransition, useActionState, useEffect, useId, useRef } from "react";
+import { startTransition, useActionState, useEffect, useId, useRef, useState } from "react";
 import { submitLead, type LeadState } from "@/app/(site)/actions";
 import { serviceNav } from "@/content/service-nav";
 import { site } from "@/config/site";
 import { trackLead } from "@/lib/track";
 import { IconArrow, IconTelegram } from "@/components/ui/Icons";
 import { contactMethods } from "./lead-options";
+import { formatPhoneInput, normalizePhone, PHONE_ERROR, UA_PREFIX } from "@/lib/phone";
 
 /** Форма заявки. Успішна відправка → події generate_lead (GA4 / GTM) і Lead (Meta Pixel). */
 export function LeadForm({
@@ -24,6 +25,8 @@ export function LeadForm({
   const uid = useId();
   const form = useRef<HTMLFormElement>(null);
   const tracked = useRef<LeadState | null>(null);
+  // Перевірка телефону ще до відправлення; null — показуємо помилку з сервера (якщо є)
+  const [phoneError, setPhoneError] = useState<string | null>(null);
 
   // Службові поля заповнюємо лише в браузері (інакше розбіжність при гідратації)
   useEffect(() => {
@@ -37,7 +40,8 @@ export function LeadForm({
   }, []);
 
   useEffect(() => {
-    if (state.ok && tracked.current !== state) {
+    // Лише заявка, яку сервер справді зберіг (не помилка валідації й не пастка для ботів)
+    if (state.ok && !state.spam && tracked.current !== state) {
       tracked.current = state;
       trackLead({ form_location: location });
     }
@@ -55,7 +59,7 @@ export function LeadForm({
     );
   }
 
-  const err = state.fields ?? {};
+  const err = { ...state.fields, ...(phoneError !== null ? { phone: phoneError || undefined } : {}) };
   const id = (k: string) => `${uid}-${k}`;
 
   return (
@@ -65,7 +69,14 @@ export function LeadForm({
       // Відправка вручну: так React не очищає поля, якщо сервер повернув помилку
       onSubmit={(e) => {
         e.preventDefault();
-        const data = new FormData(e.currentTarget);
+        const f = e.currentTarget;
+        const phoneInput = f.elements.namedItem("phone") as HTMLInputElement;
+        if (!normalizePhone(phoneInput.value)) {
+          setPhoneError(PHONE_ERROR);
+          phoneInput.focus();
+          return;
+        }
+        const data = new FormData(f);
         startTransition(() => action(data));
       }}
       className={`lead lead--${tone}`}
@@ -110,14 +121,34 @@ export function LeadForm({
             type="tel"
             inputMode="tel"
             autoComplete="tel"
-            placeholder="+38 (0__) ___ __ __"
+            placeholder="+380 __ ___ __ __"
             required
             maxLength={30}
+            // Маска: +380 вже введено, номер форматується «+380 50 123 45 67»
+            onFocus={(e) => {
+              const el = e.currentTarget;
+              if (!el.value) {
+                el.value = UA_PREFIX;
+                requestAnimationFrame(() => el.setSelectionRange(el.value.length, el.value.length));
+              }
+            }}
+            onChange={(e) => {
+              const el = e.currentTarget;
+              const formatted = formatPhoneInput(el.value);
+              if (formatted !== el.value) el.value = formatted;
+              if (phoneError && normalizePhone(formatted)) setPhoneError("");
+            }}
+            // Помилка з’являється після виходу з поля; лише префікс без цифр — поле очищуємо
+            onBlur={(e) => {
+              const el = e.currentTarget;
+              if (el.value.replace(/\D/g, "").length <= 3) el.value = "";
+              if (el.value) setPhoneError(normalizePhone(el.value) ? "" : PHONE_ERROR);
+            }}
             aria-invalid={!!err.phone}
             aria-describedby={err.phone ? id("phone-e") : undefined}
           />
           {err.phone && (
-            <p id={id("phone-e")} className="lead__error">
+            <p id={id("phone-e")} className="lead__error" role="alert">
               {err.phone}
             </p>
           )}

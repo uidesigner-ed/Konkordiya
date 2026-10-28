@@ -8,6 +8,15 @@ export type SiteSettings = {
   ga4Id: string;
   /** Google Tag Manager — «GTM-XXXXXXX» (якщо теги ведуться через GTM) */
   gtmId: string;
+  /** Google Ads — «AW-XXXXXXXXXX» (тег конверсій і ремаркетингу) */
+  googleAdsId: string;
+  /** Мітки конверсій Google Ads (частина після «AW-…/»): заявка, дзвінок, Telegram, WhatsApp, Instagram, пошта */
+  adsLabelLead: string;
+  adsLabelCall: string;
+  adsLabelTelegram: string;
+  adsLabelWhatsapp: string;
+  adsLabelInstagram: string;
+  adsLabelEmail: string;
   /** Meta Pixel — числовий ID */
   metaPixelId: string;
   /** Google Search Console — значення content з мета-тегу підтвердження */
@@ -22,9 +31,16 @@ export type SiteSettings = {
 };
 
 const DEFAULTS: SiteSettings = {
-  ga4Id: process.env.NEXT_PUBLIC_GA4_ID ?? "",
+  ga4Id: process.env.NEXT_PUBLIC_GA4_ID || "G-3XE2N5ZHST",
   gtmId: process.env.NEXT_PUBLIC_GTM_ID ?? "",
-  metaPixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID ?? "",
+  googleAdsId: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || "AW-18360350961",
+  adsLabelLead: "nEV1CLCJ1aUdEPHx8rJE", // «Надсилання форми для лідів»
+  adsLabelCall: "UP5wCIO08aQdEPHx8rJE", // «Телефон — клік із сайту»
+  adsLabelTelegram: "UXgTCMa83KQdEPHx8rJE", // «Месенджер — клік із сайту» (лише Telegram)
+  adsLabelWhatsapp: "KQL6CM3q16UdEPHx8rJE", // «WhatsApp — клік із сайту»
+  adsLabelInstagram: "",
+  adsLabelEmail: "9ADqCMrq16UdEPHx8rJE", // «Пошта — клік із сайту»
+  metaPixelId: process.env.NEXT_PUBLIC_META_PIXEL_ID || "1889888642445596",
   gscVerification: process.env.GOOGLE_SITE_VERIFICATION ?? "",
   customHead: "",
   customBody: "",
@@ -52,6 +68,22 @@ export function validateSettings(input: Record<string, FormDataEntryValue | null
   if (ga4Id && !/^G-[A-Z0-9]{4,16}$/.test(ga4Id)) errors.ga4Id = "Формат: G-XXXXXXXXXX";
   const gtmId = s("gtmId").toUpperCase();
   if (gtmId && !/^GTM-[A-Z0-9]{4,12}$/.test(gtmId)) errors.gtmId = "Формат: GTM-XXXXXXX";
+  const googleAdsId = s("googleAdsId").toUpperCase();
+  if (googleAdsId && !/^AW-\d{6,16}$/.test(googleAdsId)) errors.googleAdsId = "Формат: AW-XXXXXXXXXX";
+  // Мітка конверсії: можна вставити лише мітку, «AW-…/мітка» або весь фрагмент коду з send_to
+  const label = (k: string) => {
+    const v = s(k, 2000);
+    const m = v.match(/AW-\d+\/([\w-]+)/);
+    const out = m ? m[1] : v;
+    if (out && !/^[\w-]{4,40}$/.test(out)) errors[k] = "Вставте мітку конверсії (частина після «AW-…/»)";
+    return out;
+  };
+  const adsLabelLead = label("adsLabelLead");
+  const adsLabelCall = label("adsLabelCall");
+  const adsLabelTelegram = label("adsLabelTelegram");
+  const adsLabelWhatsapp = label("adsLabelWhatsapp");
+  const adsLabelInstagram = label("adsLabelInstagram");
+  const adsLabelEmail = label("adsLabelEmail");
   const metaPixelId = s("metaPixelId");
   if (metaPixelId && !/^\d{8,20}$/.test(metaPixelId)) errors.metaPixelId = "Лише цифри, 8–20 знаків";
   // Можна вставити весь мета-тег — витягнемо значення content
@@ -62,6 +94,13 @@ export function validateSettings(input: Record<string, FormDataEntryValue | null
   const data: SiteSettings = {
     ga4Id,
     gtmId,
+    googleAdsId,
+    adsLabelLead,
+    adsLabelCall,
+    adsLabelTelegram,
+    adsLabelWhatsapp,
+    adsLabelInstagram,
+    adsLabelEmail,
     metaPixelId,
     gscVerification,
     customHead: String(input.customHead ?? "").slice(0, 20000),

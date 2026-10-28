@@ -85,6 +85,17 @@ const SCHEMA = [
     created_at INTEGER NOT NULL
   )`,
   `CREATE INDEX IF NOT EXISTS leads_created ON leads(created_at)`,
+  // Telegram-бот: крок діалогу з клієнтом і візит із сайту, з якого він прийшов (для GA4 / джерела заявки)
+  `CREATE TABLE IF NOT EXISTS tg_sessions (
+    chat_id TEXT PRIMARY KEY,
+    data TEXT NOT NULL,
+    updated_at INTEGER NOT NULL
+  )`,
+  `CREATE TABLE IF NOT EXISTS tg_visits (
+    token TEXT PRIMARY KEY,
+    data TEXT NOT NULL,
+    created_at INTEGER NOT NULL
+  )`,
   `CREATE TABLE IF NOT EXISTS login_attempts (
     key TEXT PRIMARY KEY,
     count INTEGER NOT NULL,
@@ -100,7 +111,24 @@ async function migrate(c: Client) {
     await c.execute("PRAGMA journal_mode = WAL").catch(() => {});
   }
   await c.batch(SCHEMA, "write");
+  await addLeadColumns(c);
   await bootstrap(c);
+}
+
+/** Нові поля заявок (джерело, Telegram, хто взяв у роботу) — для баз, створених раніше */
+async function addLeadColumns(c: Client) {
+  const columns: [string, string][] = [
+    ["source", "TEXT NOT NULL DEFAULT 'form'"],
+    ["tg_chat_id", "TEXT"],
+    ["tg_username", "TEXT"],
+    ["tg_message_id", "INTEGER"],
+    ["assignee", "TEXT"],
+  ];
+  const { rows } = await c.execute("PRAGMA table_info(leads)");
+  const have = new Set(rows.map((r) => String(r.name)));
+  for (const [name, type] of columns) {
+    if (!have.has(name)) await c.execute(`ALTER TABLE leads ADD COLUMN ${name} ${type}`);
+  }
 }
 
 /** Перший запуск: стартові статті й перший адміністратор (з ADMIN_EMAIL / ADMIN_PASSWORD) */

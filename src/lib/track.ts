@@ -6,6 +6,9 @@
  *    click_call       — натиснуто телефон
  *    click_messenger  — натиснуто Telegram / WhatsApp / Viber / Instagram
  *    click_email      — натиснуто пошту
+ *  Google Ads: ті самі події; якщо задано мітку конверсії для події —
+ *    додатково надсилається конверсія (send_to: AW-…/мітка), одна на кожну дію.
+ *    Ключ мітки — «подія» або точніше «подія:месенджер» (напр. click_messenger:telegram).
  *  Meta Pixel: Lead (заявка), Contact (дзвінок, месенджер, пошта).
  *  GTM: ті самі назви приходять у dataLayer як { event: "…" } — тригер «Користувацька подія».
  */
@@ -20,11 +23,20 @@ declare global {
   }
 }
 
+/** «подія» або «подія:месенджер» → «AW-…/мітка» конверсії Google Ads (з налаштувань сайту) */
+let adsConversions: Record<string, string> = {};
+export function setAdsConversions(map: Record<string, string>) {
+  adsConversions = map;
+}
+
 export function track(event: string, params: Params = {}, meta?: { event: string; params?: Params }) {
   if (typeof window === "undefined") return;
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event, ...params });
   window.gtag?.("event", event, params);
+  const sendTo = adsConversions[`${event}:${params.messenger}`] ?? adsConversions[event];
+  // Цінність — як у фрагментах конверсій Google Ads; надсилання не затримує перехід за посиланням
+  if (sendTo) window.gtag?.("event", "conversion", { send_to: sendTo, value: 1.0, currency: "UAH" });
   if (meta) window.fbq?.("track", meta.event, meta.params ?? {});
 }
 

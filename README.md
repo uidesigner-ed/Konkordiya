@@ -68,7 +68,8 @@ SEO-структура, розподіл ключових запитів, під
 | --- | --- |
 | `DATABASE_URL`, `DATABASE_AUTH_TOKEN` | База Turso на продакшні. Без них на Vercel зміни з адмінки не збережуться |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` | Перший адміністратор (створюється, лише якщо в базі ще немає користувачів) |
-| `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | Сповіщення про заявки в Telegram (необов’язково) |
+| `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET`, `TELEGRAM_CHAT_ID` | Telegram-бот заявок @konkordiya_bot і група менеджерів (див. нижче) |
+| `GA4_API_SECRET` | Подія `telegram_bot_lead` із бота в GA4 (Measurement Protocol) |
 | `NEXT_PUBLIC_GA4_ID`, `NEXT_PUBLIC_GTM_ID`, `NEXT_PUBLIC_META_PIXEL_ID`, `GOOGLE_SITE_VERIFICATION` | Запасний варіант, якщо не задано в адмінці |
 
 ## Ресурси
@@ -115,3 +116,27 @@ npx vercel --prod
 
 4. Увійдіть у `/admin`, змініть пароль у «Профілі», додайте ідентифікатори аналітики й пройдіть чек-лист із [docs/SEO.md](docs/SEO.md).
 5. Підключіть домен `tyrkovevgen.com.ua` у Vercel → Project → Settings → Domains.
+
+## Telegram-бот заявок
+
+Усі кнопки Telegram на сайті ведуть у [@konkordiya_bot](https://t.me/konkordiya_bot). Сценарій (`src/lib/server/bot.ts`):
+послуга → ім’я → телефон (кнопка «Надіслати номер») → питання → заявка. Заявки з бота й з форми сайту:
+
+- зберігаються в адмінці («Заявки», канал «Telegram-бот» / «Форма на сайті»);
+- надходять у групу менеджерів з кнопками «Беру в роботу» / «Опрацьована» — заявку, яку вже взяли, інший менеджер
+  не перехопить; статус синхронізується з адмінкою в обидва боки;
+- у неробочий час (пн–пт 09:00–17:00 за Києвом) клієнт отримує автовідповідь із графіком.
+
+**Відстеження.** Натискання кнопки Telegram — подія `click_messenger` (конверсія Google Ads «Месенджер — клік із сайту»).
+Завершена заявка в боті — окрема подія `telegram_bot_lead` у GA4: кнопка на сайті передає боту ключ візиту
+(`?start=…`), за яким сервер знаходить джерело (utm, gclid) і ідентифікатори GA4 відвідувача (`_ga`, `_ga_<ID>`),
+тож подія потрапляє в ту саму сесію й успадковує її рекламне джерело. Позначте `telegram_bot_lead` ключовою подією в GA4
+та імпортуйте в Google Ads.
+
+**Підключення на сервері:**
+
+1. У `.env`: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET` (`openssl rand -hex 24`), `GA4_API_SECRET`.
+2. `node --env-file=.env scripts/telegram-setup.mjs` — вебхук, команди, опис бота.
+3. Додайте бота в групу «Заявки Конкордія» і надішліть там `/chatid` → впишіть `TELEGRAM_CHAT_ID` у `.env`.
+4. `pm2 restart konkordia`.
+

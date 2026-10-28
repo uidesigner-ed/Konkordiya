@@ -4,9 +4,12 @@ import { clientIpHash } from "@/lib/server/auth";
 import { createLead, recentLeadsFrom } from "@/lib/server/leads";
 import { contactMethods } from "@/components/forms/lead-options";
 import { serviceNav } from "@/content/service-nav";
+import { normalizePhone, PHONE_ERROR } from "@/lib/phone";
 
 export type LeadState = {
   ok: boolean;
+  /** Спрацювала пастка для ботів: показуємо «дякуємо», але заявку не збережено й конверсію не рахуємо */
+  spam?: boolean;
   error?: string;
   fields?: Partial<Record<"name" | "phone" | "consent", string>>;
 };
@@ -20,20 +23,19 @@ const clean = (v: FormDataEntryValue | null, max: number) =>
 /** Заявка з форми сайту */
 export async function submitLead(_prev: LeadState, form: FormData): Promise<LeadState> {
   // Пастка для ботів: приховане поле має лишитися порожнім, а форму не заповнюють за секунду
-  if (clean(form.get("website"), 200)) return { ok: true };
+  if (clean(form.get("website"), 200)) return { ok: true, spam: true };
   const started = Number(form.get("t"));
   if (!Number.isFinite(started) || Date.now() - started < 2500) {
     return { ok: false, error: "Будь ласка, спробуйте ще раз за кілька секунд." };
   }
 
   const name = clean(form.get("name"), 80);
-  const phone = clean(form.get("phone"), 30);
-  const digits = phone.replace(/\D/g, "");
+  const phone = normalizePhone(clean(form.get("phone"), 30));
   const fields: LeadState["fields"] = {};
   if (name.length < 2) fields.name = "Вкажіть, як до вас звертатися";
-  if (digits.length < 9 || digits.length > 15) fields.phone = "Перевірте номер телефону";
+  if (!phone) fields.phone = PHONE_ERROR;
   if (form.get("consent") !== "on") fields.consent = "Потрібна згода на обробку даних";
-  if (Object.keys(fields).length) return { ok: false, fields };
+  if (Object.keys(fields).length || !phone) return { ok: false, fields };
 
   const contact = clean(form.get("contact"), 20);
   const service = clean(form.get("service"), 120);

@@ -19,7 +19,11 @@ export function SheetIndicator() {
           trigger: `#${s.id}`,
           start: "top 55%",
           end: "bottom 55%",
-          onToggle: (self) => self.isActive && setCurrent(i),
+          // Вхід / повернення в розділ. Не onToggle: після стрибка (відновлення позиції при перезавантаженні)
+          // пройдені розділи не стають «активними», а onEnter спрацьовує для кожного по черзі
+          onEnter: () => setCurrent(i),
+          onEnterBack: () => setCurrent(i),
+          onLeaveBack: () => setCurrent(Math.max(0, i - 1)),
         }),
       );
     });

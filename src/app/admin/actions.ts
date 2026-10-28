@@ -125,10 +125,13 @@ export async function saveSettingsAction(_prev: FormState, form: FormData): Prom
 /* ── Заявки ── */
 
 export async function setLeadStatusAction(form: FormData) {
-  await requireUser();
+  const me = await requireUser();
   const id = Number(form.get("id"));
   const status = String(form.get("status")) as LeadStatus;
-  if (id > 0 && leadStatuses.some((s) => s.id === status)) await setLeadStatus(id, status);
+  // «В роботі» з адмінки — менеджером стає той, хто змінив; «Нова» — без менеджера
+  if (id > 0 && leadStatuses.some((s) => s.id === status)) {
+    await setLeadStatus(id, status, status === "work" ? me.name : status === "new" ? null : undefined);
+  }
   revalidatePath("/admin/leads");
 }
 
