@@ -56,10 +56,10 @@ export function Support() {
           const { fx, fy, tx, ty } = d.dataset;
           tl.fromTo(
             d,
-            { attr: { cx: Number(fx), cy: Number(fy) }, scale: 0, transformOrigin: "50% 50%", fill: "#141210" },
+            { attr: { cx: Number(fx), cy: Number(fy) }, scale: 0, transformOrigin: "50% 50%", fill: "#000000" },
             { scale: 1, duration: 0.35, ease: "back.out(3)", immediateRender: true },
             0.45 + k * 0.06,
-          ).to(d, { attr: { cx: Number(tx), cy: Number(ty) }, fill: "#1F4D3A", duration: 1.1, ease: "power3.inOut" }, 1.05 + k * 0.09);
+          ).to(d, { attr: { cx: Number(tx), cy: Number(ty) }, fill: "#0c1728", duration: 1.1, ease: "power3.inOut" }, 1.05 + k * 0.09);
         });
         tl.fromTo(sel(".lc-trail"), { drawSVG: "0%" }, { drawSVG: "100%", duration: 1.1, stagger: 0.09, ease: "power3.inOut" }, 1.05);
       }
@@ -71,8 +71,8 @@ export function Support() {
           tl.fromTo(cg.querySelector("text"), { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.5 }, t)
             .fromTo(
               cg.querySelector(".lc-node"),
-              { fill: "#ECE7DE", stroke: "#141210" },
-              { fill: "#1F4D3A", stroke: "#1F4D3A", duration: 0.3 },
+              { fill: "#edeeef", stroke: "#000000" },
+              { fill: "#0c1728", stroke: "#0c1728", duration: 0.3 },
               t + 0.25,
             )
             .fromTo(cg.querySelector(".lc-node-tick"), { drawSVG: "0%" }, { drawSVG: "100%", duration: 0.3 }, t + 0.32);

@@ -8,10 +8,10 @@ import type { CoverId } from "@/content/news";
  */
 
 const TONES = {
-  paper: { bg: "#ECE7DE", rule: "rgba(20,18,16,.08)", fg: "#141210", soft: "rgba(20,18,16,.26)", acc: "#1F4D3A", sheet: "#F5F2EC" },
-  sand: { bg: "#E3DDD1", rule: "rgba(20,18,16,.08)", fg: "#141210", soft: "rgba(20,18,16,.26)", acc: "#1F4D3A", sheet: "#F5F2EC" },
-  emerald: { bg: "#1F4D3A", rule: "rgba(245,242,236,.09)", fg: "#F5F2EC", soft: "rgba(245,242,236,.34)", acc: "#F5F2EC", sheet: "#2A6650" },
-  deep: { bg: "#13301F", rule: "rgba(245,242,236,.07)", fg: "#F5F2EC", soft: "rgba(245,242,236,.3)", acc: "#F5F2EC", sheet: "#1F4D3A" },
+  paper: { bg: "#edeeef", rule: "rgba(0,0,0,.08)", fg: "#000000", soft: "rgba(0,0,0,.26)", acc: "#0c1728", sheet: "#ffffff" },
+  sand: { bg: "#d9dadc", rule: "rgba(0,0,0,.08)", fg: "#000000", soft: "rgba(0,0,0,.26)", acc: "#0c1728", sheet: "#ffffff" },
+  emerald: { bg: "#0c1728", rule: "rgba(255,255,255,.09)", fg: "#ffffff", soft: "rgba(255,255,255,.34)", acc: "#ffffff", sheet: "#1b2b45" },
+  deep: { bg: "#060c16", rule: "rgba(255,255,255,.07)", fg: "#ffffff", soft: "rgba(255,255,255,.3)", acc: "#ffffff", sheet: "#0c1728" },
 } as const;
 
 type Tone = (typeof TONES)[keyof typeof TONES];
@@ -29,9 +29,9 @@ const COVER_TONE: Record<CoverId, keyof typeof TONES> = {
   scale: "emerald",
 };
 
-const RED = "#E2552C";
-const INK = "#141210";
-const EMERALD = "#1F4D3A";
+const RED = "#dfbc7c";
+const INK = "#000000";
+const EMERALD = "#0c1728";
 
 type MotifProps = { c: Tone; hatch: string; uid: string };
 
@@ -75,7 +75,7 @@ function Fork({ c }: MotifProps) {
       ))}
       <g className="ncv__pop">
         <circle cx="676" cy="350" r="24" fill={RED} />
-        <path d="M665 350l8 8 15-17" stroke="#F5F2EC" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M665 350l8 8 15-17" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
       </g>
     </>
   );
@@ -129,7 +129,7 @@ function Stack({ c, hatch }: MotifProps) {
       <rect x="280" y="110" width="300" height="380" fill={c.sheet} stroke={c.soft} strokeWidth="1.5" transform="rotate(-9 430 300)" />
       <rect x="280" y="110" width="300" height="380" fill={`url(#${hatch})`} stroke={c.soft} strokeWidth="1.5" transform="rotate(5 430 300)" />
       <g className="ncv__sheet" transform="rotate(-2 430 300)">
-        <rect x="280" y="110" width="300" height="380" fill="#F5F2EC" />
+        <rect x="280" y="110" width="300" height="380" fill="#ffffff" />
         <rect x="308" y="140" width="118" height="14" fill={INK} />
         <rect x="308" y="166" width="72" height="7" fill={INK} opacity=".25" />
         {[206, 236, 266, 296, 326].map((y, i) => (
@@ -254,7 +254,7 @@ function Shield({ c }: MotifProps) {
       {[200, 232, 264, 296, 328, 360, 392, 424].map((y, i) => (
         <rect key={y} x="228" y={y} width={[190, 150, 176, 120, 168, 140, 186, 110][i]} height="7" fill={c.fg} opacity=".28" />
       ))}
-      <path d="M540 172L642 208V300C642 374 598 420 540 446C482 420 438 374 438 300V208Z" fill="#F5F2EC" />
+      <path d="M540 172L642 208V300C642 374 598 420 540 446C482 420 438 374 438 300V208Z" fill="#ffffff" />
       <path d="M540 196L622 225V300C622 360 588 398 540 420C492 398 458 360 458 300V225Z" stroke={EMERALD} strokeOpacity=".3" strokeWidth="1.5" fill="none" />
       <path className="ncv__pop" d="M505 304l24 24 45-52" stroke={EMERALD} strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" fill="none" />
       <g className="ncv__scan">
@@ -305,7 +305,7 @@ function Steps({ c, hatch }: MotifProps) {
 function Donut({ c, hatch }: MotifProps) {
   const segs = [
     { v: 58, s: c.acc },
-    { v: 22, s: "#2A6650" },
+    { v: 22, s: "#1b2b45" },
     { v: 12, s: `url(#${hatch})` },
     { v: 8, s: RED },
   ];

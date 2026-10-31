@@ -74,7 +74,7 @@
 }
 .nchip[aria-pressed="true"] sup,
 .nchip[aria-current] sup {
-  color: rgb(245 242 236 / 0.65);
+  color: rgb(255 255 255 / 0.65);
 }
 .nchip--sm {
   height: 30px;
@@ -408,7 +408,7 @@
 .ncard:hover .ncard__arrow {
   background: var(--red);
   border-color: var(--red);
-  color: var(--paper);
+  color: var(--emerald);
   transform: rotate(45deg);
 }
 
@@ -544,7 +544,7 @@
   font-size: 2rem;
   font-weight: 300;
   line-height: 0.9;
-  color: var(--red);
+  color: var(--gold-dark);
 }
 .nlist__link {
   font-size: 15.5px;
@@ -588,7 +588,7 @@
   background-image: repeating-linear-gradient(
     to bottom,
     transparent 0 47px,
-    rgb(245 242 236 / 0.06) 47px 48px
+    rgb(255 255 255 / 0.06) 47px 48px
   );
   color: var(--paper);
 }
@@ -618,7 +618,7 @@
 .ncta__text {
   max-width: 40ch;
   font-size: 17px;
-  color: rgb(245 242 236 / 0.8);
+  color: rgb(255 255 255 / 0.8);
 }
 .ncta__actions {
   display: flex;
@@ -916,7 +916,7 @@
 .share__btn[data-copied="true"] {
   background: var(--red);
   border-color: var(--red);
-  color: var(--paper);
+  color: var(--emerald);
 }
 .share__toast {
   position: absolute;
@@ -1081,7 +1081,7 @@
   font-size: 6.5rem;
   font-style: italic;
   line-height: 0.75;
-  color: var(--red);
+  color: var(--gold-dark);
 }
 .art-quote blockquote p {
   font-family: var(--font-serif);
@@ -1716,7 +1716,7 @@ html.has-cursor .svp-faq__item summary {
   gap: 40px clamp(12px, 1.6vw, 28px);
   padding: clamp(32px, 5vw, 88px) clamp(24px, 4.6vw, 88px);
   background-color: var(--emerald-deep);
-  background-image: repeating-linear-gradient(to bottom, transparent 0 47px, rgb(245 242 236 / 0.05) 47px 48px);
+  background-image: repeating-linear-gradient(to bottom, transparent 0 47px, rgb(255 255 255 / 0.05) 47px 48px);
   color: var(--paper);
 }
 .svp-lead__inner::before {
@@ -1746,7 +1746,7 @@ html.has-cursor .svp-faq__item summary {
 }
 .svp-lead__text {
   max-width: 38ch;
-  color: rgb(245 242 236 / 0.8);
+  color: rgb(255 255 255 / 0.8);
 }
 .svp-lead__phone {
   display: inline-flex;
@@ -1756,7 +1756,7 @@ html.has-cursor .svp-faq__item summary {
 }
 .svp-lead__addr {
   font-size: 14px;
-  color: rgb(245 242 236 / 0.65);
+  color: rgb(255 255 255 / 0.65);
 }
 .svp-lead .social-links__a:hover {
   background: var(--paper);
@@ -1855,7 +1855,7 @@ html.has-cursor .svp-faq__item summary {
 .svh-row__link:hover .svh-row__arrow {
   background: var(--red);
   border-color: var(--red);
-  color: var(--paper);
+  color: var(--emerald);
   transform: rotate(45deg);
 }
 
