@@ -177,9 +177,9 @@ function Field({ atlas, pointer, cellSize, focusX, progress, reduced }: FieldPro
       uSize: { value: new THREE.Vector2(1, 1) },
       uFocusX: { value: focusX },
       uAtlas: { value: atlas },
-      uInk: { value: new THREE.Color("#141210") },
-      uGreen: { value: new THREE.Color("#1F4D3A") },
-      uRed: { value: new THREE.Color("#E2552C") },
+      uInk: { value: new THREE.Color("#000000") },
+      uGreen: { value: new THREE.Color("#0c1728") },
+      uRed: { value: new THREE.Color("#dfbc7c") },
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [atlas],

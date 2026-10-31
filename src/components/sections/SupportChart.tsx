@@ -58,12 +58,12 @@ export function SupportChart() {
         <svg className="lc__svg" viewBox="0 0 520 380" fill="none">
           <defs>
             <pattern id="lc-hatch-red" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-              <rect width="7" height="7" fill="#F6E1D8" />
-              <line x1="0" y1="0" x2="0" y2="7" stroke="#E2552C" strokeWidth="2.4" />
+              <rect width="7" height="7" fill="#f7eedd" />
+              <line x1="0" y1="0" x2="0" y2="7" stroke="#dfbc7c" strokeWidth="2.4" />
             </pattern>
             <pattern id="lc-hatch-ink" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
-              <rect width="6" height="6" fill="#E3DDD1" />
-              <line x1="0" y1="0" x2="0" y2="6" stroke="#141210" strokeOpacity=".5" strokeWidth="1.2" />
+              <rect width="6" height="6" fill="#d9dadc" />
+              <line x1="0" y1="0" x2="0" y2="6" stroke="#000000" strokeOpacity=".5" strokeWidth="1.2" />
             </pattern>
           </defs>
 
@@ -101,7 +101,7 @@ export function SupportChart() {
                   y={RY + row * CH}
                   width={CW}
                   height={CH}
-                  fill="#E2552C"
+                  fill="#dfbc7c"
                   fillOpacity={0.04 + level * 0.34}
                   data-level={level}
                 />

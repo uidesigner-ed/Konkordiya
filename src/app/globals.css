@@ -3,20 +3,24 @@
 
 /* ───────────────────────── Токени ───────────────────────── */
 :root {
-  --paper: #f5f2ec;
-  --paper-2: #ece7de;
-  --paper-3: #e3ddd1;
-  --ink: #141210;
-  --ink-2: #5b554d;
-  --emerald: #1f4d3a;
-  --emerald-2: #2a6650;
-  --emerald-deep: #13301f;
-  --red: #e2552c;
-  /* Той самий червоний, затемнений для дрібного тексту (контраст ≥ 4.5 на папері) */
-  --red-ink: #b23c18;
-  --line: rgb(20 18 16 / 0.14);
-  --line-strong: rgb(20 18 16 / 0.32);
-  --rule-green: rgb(31 77 58 / 0.2);
+  --paper: #ffffff;
+  --paper-2: #edeeef;
+  --paper-3: #d9dadc;
+  --ink: #000000;
+  --ink-2: #55575b;
+  --emerald: #0c1728;
+  --emerald-2: #1b2b45;
+  --emerald-deep: #060c16;
+  /* Фірмова палітра: --emerald* — темно-синій, --red* — золото (імена токенів збережені) */
+  --red: #dfbc7c;
+  /* Темне золото #a67c3d, затемнене для дрібного тексту (контраст ≥ 4.5 на білому) */
+  --red-ink: #8a6631;
+  --gold-dark: #a67c3d;
+  /* Помилки форм лишаються червоними — це не декор */
+  --danger: #b23c18;
+  --line: rgb(0 0 0 / 0.14);
+  --line-strong: rgb(0 0 0 / 0.32);
+  --rule-green: rgb(12 23 40 / 0.2);
 
   --gutter: clamp(16px, 3.4vw, 56px);
   --margin: 0px;
@@ -221,10 +225,10 @@ html.on-cover .ledger-rule {
   z-index: 0;
 }
 .grid-lines span {
-  border-left: 1px solid rgb(20 18 16 / 0.045);
+  border-left: 1px solid rgb(0 0 0 / 0.045);
 }
 .grid-lines span:last-child {
-  border-right: 1px solid rgb(20 18 16 / 0.045);
+  border-right: 1px solid rgb(0 0 0 / 0.045);
 }
 
 @media (max-width: 1023px) {
@@ -483,7 +487,24 @@ html:not(.js-motion) .preloader {
 .btn:hover .btn__icon,
 .btn:focus-visible .btn__icon {
   background: var(--red);
-  color: var(--paper);
+  color: var(--emerald);
+}
+/* Основна кнопка: темно-синя із золотою іконкою, на ховері заливається золотом */
+.btn--primary::before {
+  background: var(--red);
+}
+.btn--primary:hover,
+.btn--primary:focus-visible {
+  color: var(--emerald);
+}
+.btn--primary .btn__icon {
+  background: var(--red);
+  color: var(--emerald);
+}
+.btn--primary:hover .btn__icon,
+.btn--primary:focus-visible .btn__icon {
+  background: var(--emerald);
+  color: var(--red);
 }
 .btn__icon-a,
 .btn__icon-b {
@@ -555,7 +576,7 @@ html:not(.js-motion) .preloader {
   width: 38px;
   height: 38px;
   margin: -19px 0 0 -19px;
-  border: 1px solid rgb(20 18 16 / 0.4);
+  border: 1px solid rgb(0 0 0 / 0.4);
   transition:
     width 0.5s var(--ease-out),
     height 0.5s var(--ease-out),
@@ -569,7 +590,7 @@ html:not(.js-motion) .preloader {
   height: 64px;
   margin: -32px 0 0 -32px;
   border-color: var(--emerald);
-  background: rgb(31 77 58 / 0.08);
+  background: rgb(12 23 40 / 0.08);
 }
 .cursor[data-mode="label"] .cursor__ring {
   width: 112px;
@@ -582,7 +603,7 @@ html:not(.js-motion) .preloader {
   opacity: 0;
 }
 .cursor[data-dark="true"] .cursor__ring {
-  border-color: rgb(245 242 236 / 0.5);
+  border-color: rgb(255 255 255 / 0.5);
 }
 .cursor[data-dark="true"][data-mode="label"] .cursor__ring {
   background: var(--paper);
@@ -614,7 +635,7 @@ html.cursor-down .cursor__ring {
   flex-direction: column;
   align-items: center;
   gap: 18px;
-  color: #f5f2ec;
+  color: #ffffff;
   mix-blend-mode: difference;
   pointer-events: none;
   transition: opacity 0.5s;
@@ -836,7 +857,7 @@ html.on-cover .sheet-indicator {
   transform: translateX(-3px);
 }
 .menu-toggle--close {
-  border-color: rgb(245 242 236 / 0.3);
+  border-color: rgb(255 255 255 / 0.3);
 }
 .menu-toggle--close:hover {
   background: var(--paper);
@@ -893,7 +914,7 @@ html.on-cover .sheet-indicator {
 }
 .menu__item {
   overflow: hidden;
-  border-top: 1px solid rgb(245 242 236 / 0.14);
+  border-top: 1px solid rgb(255 255 255 / 0.14);
 }
 .menu__link {
   display: flex;
@@ -912,7 +933,7 @@ html.on-cover .sheet-indicator {
 .menu__num {
   min-width: 24px;
   font-size: 12px;
-  color: rgb(245 242 236 / 0.5);
+  color: rgb(255 255 255 / 0.5);
   transition: color 0.3s;
 }
 .menu__list:hover .menu__link {
@@ -936,7 +957,7 @@ html.on-cover .sheet-indicator {
   align-items: center;
   gap: 10px 32px;
   padding-top: 22px;
-  border-top: 1px solid rgb(245 242 236 / 0.14);
+  border-top: 1px solid rgb(255 255 255 / 0.14);
 }
 .menu__contact {
   font-size: 15px;
@@ -1321,7 +1342,7 @@ html.on-cover .sheet-indicator {
   .reg-row:hover .reg-row__statlabel,
   .reg-row:focus-visible .reg-row__name,
   .reg-row:focus-visible .reg-row__statlabel {
-    color: rgb(245 242 236 / 0.72);
+    color: rgb(255 255 255 / 0.72);
   }
   .reg-row:hover .counter__suffix,
   .reg-row:focus-visible .counter__suffix {
@@ -1478,8 +1499,8 @@ html.on-cover .sheet-indicator {
   bottom: 0;
   left: 14px;
   width: 4px;
-  border-left: 1px solid rgb(226 85 44 / 0.45);
-  border-right: 1px solid rgb(226 85 44 / 0.45);
+  border-left: 1px solid rgb(223 188 124 / 0.45);
+  border-right: 1px solid rgb(223 188 124 / 0.45);
   pointer-events: none;
 }
 .lc__head,
@@ -1599,10 +1620,10 @@ html.on-cover .sheet-indicator {
   background: var(--emerald);
 }
 .lc-sw--0-1 {
-  background: repeating-linear-gradient(45deg, var(--red) 0 2px, #f6e1d8 2px 5px);
+  background: repeating-linear-gradient(45deg, var(--red) 0 2px, #f7eedd 2px 5px);
 }
 .lc-sw--0-2 {
-  background: repeating-linear-gradient(-45deg, rgb(20 18 16 / 0.5) 0 1px, #e3ddd1 1px 4px);
+  background: repeating-linear-gradient(-45deg, rgb(0 0 0 / 0.5) 0 1px, #d9dadc 1px 4px);
 }
 .lc-sw--1-0 {
   border-radius: 50%;
@@ -1622,7 +1643,7 @@ html.on-cover .sheet-indicator {
 }
 .lc-sw--3-1 {
   height: 0;
-  border-top: 2px dashed rgb(20 18 16 / 0.45);
+  border-top: 2px dashed rgb(0 0 0 / 0.45);
 }
 
 /* SVG-елементи схеми */
@@ -1969,7 +1990,7 @@ html.js-motion .sup-item:not(.is-active) .sup-item__icon {
   font-style: italic;
   font-size: 64vw;
   line-height: 0.8;
-  color: rgb(245 242 236 / 0.045);
+  color: rgb(255 255 255 / 0.045);
   pointer-events: none;
   user-select: none;
 }
@@ -2015,7 +2036,7 @@ html.js-motion .sup-item:not(.is-active) .sup-item__icon {
   margin-top: 1em;
   font-size: clamp(1.35rem, 1.9vw, 2.15rem);
   line-height: 1.24;
-  color: rgb(245 242 236 / 0.84);
+  color: rgb(255 255 255 / 0.84);
 }
 .mil-sign {
   display: flex;
@@ -2036,7 +2057,7 @@ html.js-motion .sup-item:not(.is-active) .sup-item__icon {
 .mil-sign__role {
   display: block;
   font-size: 14px;
-  color: rgb(245 242 236 / 0.66);
+  color: rgb(255 255 255 / 0.66);
 }
 .mil-cta {
   display: flex;
@@ -2046,7 +2067,7 @@ html.js-motion .sup-item:not(.is-active) .sup-item__icon {
   gap: 24px 40px;
   margin-top: clamp(56px, 6vw, 96px);
   padding-top: 32px;
-  border-top: 1px solid rgb(245 242 236 / 0.18);
+  border-top: 1px solid rgb(255 255 255 / 0.18);
 }
 .mil-cta__text {
   max-width: 24ch;
@@ -2103,13 +2124,13 @@ html.js-motion .sup-item:not(.is-active) .sup-item__icon {
   border-left: 1px solid var(--line);
 }
 .adv-bar:nth-child(1) .adv-bar__fill {
-  background: #3d6d59;
+  background: #3a4a63;
 }
 .adv-bar:nth-child(2) .adv-bar__fill {
-  background: #31614c;
+  background: #2c3c55;
 }
 .adv-bar:nth-child(3) .adv-bar__fill {
-  background: #275641;
+  background: #1f2e47;
 }
 .adv-bar:nth-child(4) .adv-bar__fill {
   background: var(--emerald);
@@ -2132,7 +2153,7 @@ html.js-motion .sup-item:not(.is-active) .sup-item__icon {
 }
 .adv-bar__num {
   font-size: 13px;
-  color: rgb(245 242 236 / 0.9);
+  color: rgb(255 255 255 / 0.9);
 }
 .adv-bar__title {
   font-family: var(--font-display);
@@ -2144,7 +2165,7 @@ html.js-motion .sup-item:not(.is-active) .sup-item__icon {
 .adv-bar__text {
   font-size: clamp(0.92rem, 1vw, 1.02rem);
   line-height: 1.45;
-  color: rgb(245 242 236 / 0.93);
+  color: rgb(255 255 255 / 0.93);
 }
 .adv-phrase {
   display: flex;
@@ -2266,7 +2287,7 @@ html.js-motion .sup-item:not(.is-active) .sup-item__icon {
   line-height: 0.8;
   letter-spacing: -0.07em;
   /* заливка, а не контур: у статичних інстансах variable-шрифту контури перекриваються */
-  color: rgb(31 77 58 / 0.07);
+  color: rgb(12 23 40 / 0.07);
   pointer-events: none;
 }
 .stage__node {
@@ -2609,7 +2630,7 @@ html.js-motion .sup-item:not(.is-active) .sup-item__icon {
   font-family: var(--font-serif);
   font-size: 7.5rem;
   line-height: 0.75;
-  color: var(--red);
+  color: var(--gold-dark);
 }
 .rev__text {
   margin-top: 14px;
@@ -2859,7 +2880,7 @@ html.js-motion .sup-item:not(.is-active) .sup-item__icon {
   gap: 12px 32px;
   padding-block: 28px 32px;
   font-size: 13px;
-  color: rgb(245 242 236 / 0.7);
+  color: rgb(255 255 255 / 0.7);
 }
 @media (max-width: 1023px) {
   .footer-slogan,
@@ -2952,7 +2973,7 @@ html.js:not(.hydrated) .photo[data-loaded="false"] {
 .footer-services {
   margin-top: clamp(56px, 6vw, 96px);
   padding-top: 24px;
-  border-top: 1px solid rgb(245 242 236 / 0.16);
+  border-top: 1px solid rgb(255 255 255 / 0.16);
 }
 .footer-services__title {
   margin-bottom: 18px;
@@ -2960,7 +2981,7 @@ html.js:not(.hydrated) .photo[data-loaded="false"] {
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgb(245 242 236 / 0.6);
+  color: rgb(255 255 255 / 0.6);
 }
 .footer-services ul {
   display: grid;
@@ -2995,7 +3016,7 @@ html[data-tracking] .footer-cookie {
   padding: 20px 22px;
   border: 1px solid var(--ink);
   background: var(--paper);
-  box-shadow: 0 18px 40px -18px rgb(20 18 16 / 0.35);
+  box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.35);
   animation: nx-fade 0.6s var(--ease-out) both;
 }
 .consent__text {
@@ -3056,9 +3077,9 @@ html[data-tracking] .footer-cookie {
 }
 .lead--dark {
   --lead-ink: var(--paper);
-  --lead-soft: rgb(245 242 236 / 0.7);
-  --lead-line: rgb(245 242 236 / 0.3);
-  --lead-field: rgb(245 242 236 / 0.06);
+  --lead-soft: rgb(255 255 255 / 0.7);
+  --lead-line: rgb(255 255 255 / 0.3);
+  --lead-field: rgb(255 255 255 / 0.06);
 }
 .lead__trap {
   position: absolute;
@@ -3132,10 +3153,10 @@ html[data-tracking] .footer-cookie {
   box-shadow: 0 0 0 1px var(--red);
 }
 .lead [aria-invalid="true"] {
-  border-color: var(--red-ink);
+  border-color: var(--danger);
 }
 .lead--dark [aria-invalid="true"] {
-  border-color: var(--red);
+  border-color: #ff9a7a;
 }
 .lead__chips {
   display: flex;
@@ -3198,7 +3219,7 @@ html[data-tracking] .footer-cookie {
 .lead__error {
   font-size: 13px;
   font-weight: 500;
-  color: var(--red-ink);
+  color: var(--danger);
 }
 .lead--dark .lead__error {
   color: #ff9a7a;
@@ -3206,7 +3227,7 @@ html[data-tracking] .footer-cookie {
 .lead__error--form {
   padding: 12px 14px;
   border-left: 3px solid currentColor;
-  background: rgb(226 85 44 / 0.08);
+  background: rgb(178 60 24 / 0.08);
 }
 .lead__submit {
   justify-self: start;
