@@ -45,3 +45,11 @@ export const MQ = {
   motion: "(prefers-reduced-motion: no-preference)",
   reduced: "(prefers-reduced-motion: reduce)",
 } as const;
+
+/**
+ * «Програти один раз» для ScrollTrigger таймлайнів — замість `once: true`.
+ * Тригер таймлайна ініціалізується на тик пізніше, і кожен новий тригер примусово його оновлює;
+ * якщо сторінку відкрито нижче секції, once-тригер видаляє себе посеред циклу refresh()
+ * і ScrollTrigger падає з «Cannot read properties of undefined (reading 'end')».
+ */
+export const PLAY_ONCE = "play none none none";

@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useFx } from "@/lib/fx";
-import { MQ } from "@/lib/motion";
+import { MQ, PLAY_ONCE } from "@/lib/motion";
 import { content } from "@/content/uk";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { IconTick } from "@/components/ui/Icons";
@@ -26,7 +26,7 @@ export function Extra() {
       mm.add(MQ.motion, () => {
         gsap.set(q(".extra-item [data-draw]"), { drawSVG: "0%" });
         q(".extra-item").forEach((item) => {
-          const tl = gsap.timeline({ scrollTrigger: { trigger: item, start: "top 86%", once: true } });
+          const tl = gsap.timeline({ scrollTrigger: { trigger: item, start: "top 86%", toggleActions: PLAY_ONCE } });
           tl.from(item.querySelector(".extra-item__rule"), { scaleX: 0, duration: 1.2, ease: "quill" })
             .from(item.querySelector(".extra-item__text"), { y: 20, opacity: 0, duration: 0.9 }, 0.1)
             .from(item.querySelector("[data-box]"), { opacity: 0, scale: 0.6, transformOrigin: "center", duration: 0.5 }, 0.15)

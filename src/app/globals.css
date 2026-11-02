@@ -16,6 +16,8 @@
   /* Темне золото #a67c3d, затемнене для дрібного тексту (контраст ≥ 4.5 на білому) */
   --red-ink: #8a6631;
   --gold-dark: #a67c3d;
+  /* Колір логотипа (знак і фавікон) */
+  --logo: #dfbc7c;
   /* Помилки форм лишаються червоними — це не декор */
   --danger: #b23c18;
   --line: rgb(0 0 0 / 0.14);
@@ -361,6 +363,7 @@ html:not(.js-motion) .preloader {
   height: 33px;
   -webkit-mask: url("/images/logo-mark.png") center / contain no-repeat;
   mask: url("/images/logo-mark.png") center / contain no-repeat;
+  background-color: var(--logo);
   flex: none;
 }
 
@@ -2478,6 +2481,13 @@ html.js-motion .sup-item:not(.is-active) .sup-item__icon {
 }
 
 /* ───────── Команда ───────── */
+/* Знизу колаж уже дає повітря (сходинки фото + паралакс), тож повний відступ секції тут зайвий */
+.team-section {
+  padding-bottom: 0;
+}
+.team-section + .section {
+  padding-top: clamp(56px, 6vw, 110px);
+}
 .team-title {
   margin-bottom: clamp(48px, 7vw, 120px);
 }
@@ -2530,6 +2540,64 @@ html.js-motion .sup-item:not(.is-active) .sup-item__icon {
 }
 .team-photo--5 {
   margin-top: 28%;
+}
+/* Вступ між заголовком і колажем: підзаголовок + цінності ліворуч, текст праворуч */
+.team-intro {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(12px, 1.6vw, 28px);
+  row-gap: 40px;
+  margin-bottom: clamp(72px, 9vw, 160px);
+}
+.team-intro__head {
+  grid-column: 1 / 7;
+}
+.team-intro__body {
+  grid-column: 8 / 13;
+  display: grid;
+  gap: 24px;
+  align-content: start;
+}
+.team-intro__title {
+  font-size: clamp(2.2rem, 4.4vw, 5.2rem);
+}
+.team-intro__values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: clamp(24px, 3vw, 40px);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.team-intro__values li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.team-intro__values li::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--red);
+}
+.team-intro__motto {
+  margin-top: 8px;
+  padding-left: 20px;
+  border-left: 2px solid var(--red);
+  font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+  line-height: 1.15;
+}
+.team-intro__motto span + span {
+  color: var(--red-ink);
+}
+@media (max-width: 1023px) {
+  .team-intro__head,
+  .team-intro__body {
+    grid-column: 1 / -1;
+  }
 }
 .team-photo__cap {
   display: flex;

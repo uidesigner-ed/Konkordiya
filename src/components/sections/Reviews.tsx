@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useFx } from "@/lib/fx";
-import { MQ } from "@/lib/motion";
+import { MQ, PLAY_ONCE } from "@/lib/motion";
 import { content } from "@/content/uk";
 import { site } from "@/config/site";
 import { SectionHead } from "@/components/ui/SectionHead";
@@ -31,7 +31,7 @@ export function Reviews() {
       const mm = gsap.matchMedia();
       mm.add(MQ.motion, () => {
         q(".rev").forEach((rev) => {
-          const tl = gsap.timeline({ scrollTrigger: { trigger: rev, start: "top 86%", once: true } });
+          const tl = gsap.timeline({ scrollTrigger: { trigger: rev, start: "top 86%", toggleActions: PLAY_ONCE } });
           tl.from(rev.querySelector(".rev__rule"), { scaleX: 0, duration: 1.3, ease: "quill" })
             .from(rev.querySelector(".rev__mark"), { yPercent: 60, opacity: 0, duration: 1 }, 0.1)
             .from(rev.querySelectorAll(".rev__text, .rev__author"), { y: 26, opacity: 0, duration: 1, stagger: 0.1 }, 0.2);

@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useFx } from "@/lib/fx";
-import { MQ } from "@/lib/motion";
+import { MQ, PLAY_ONCE } from "@/lib/motion";
 import { content } from "@/content/uk";
 import { stats } from "@/config/site";
 import { IconArrow } from "@/components/ui/Icons";
@@ -28,7 +28,7 @@ export function Audiences() {
           scrollTrigger: { trigger: q(".reg")[0], start: "top 85%", once: true },
         });
         q(".reg-row").forEach((row) => {
-          const tl = gsap.timeline({ scrollTrigger: { trigger: row, start: "top 88%", once: true } });
+          const tl = gsap.timeline({ scrollTrigger: { trigger: row, start: "top 88%", toggleActions: PLAY_ONCE } });
           tl.from(row.querySelector(".reg-row__rule"), { scaleX: 0, duration: 1.4, ease: "quill" })
             .from(row.querySelector(".reg-row__abbr-text"), { yPercent: 105, duration: 1.2 }, 0.1)
             .from(row.querySelectorAll(".reg-row__name, .reg-row__text, .reg-row__stat"), { y: 24, opacity: 0, duration: 1, stagger: 0.08 }, 0.2);

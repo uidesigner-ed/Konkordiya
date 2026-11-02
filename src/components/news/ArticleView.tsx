@@ -61,7 +61,7 @@ export function ArticleView({ a, list, preview = false }: { a: Article; list: Ar
       "@type": "Organization",
       "@id": `${site.url}/#business`,
       name: site.name,
-      logo: { "@type": "ImageObject", url: `${site.url}/icon.png` },
+      logo: { "@type": "ImageObject", url: `${site.url}/logo.png` },
     },
     isPartOf: { "@id": `${site.url}${NEWS_PATH}#blog` },
   };
@@ -100,7 +100,7 @@ export function ArticleView({ a, list, preview = false }: { a: Article; list: Ar
             </div>
             <div className="art-author">
               <span className="art-author__mark" aria-hidden>
-                <LogoMark className="bg-paper" />
+                <LogoMark />
               </span>
               <span>
                 <span className="art-author__name">{a.author}</span>

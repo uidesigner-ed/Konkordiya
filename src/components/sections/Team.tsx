@@ -8,12 +8,14 @@ import { MQ } from "@/lib/motion";
 import { content } from "@/content/uk";
 import { team } from "@/config/site";
 import { SectionHead } from "@/components/ui/SectionHead";
+import { RichText } from "@/components/ui/RichText";
 
 const speeds = [0, -14, 10, -8, 16];
 
 /** Наша команда — колаж-розкладка з різною глибиною паралаксу. */
 export function Team() {
   const root = useRef<HTMLElement>(null);
+  const o = content.team.intro;
 
   useFx(
     root,
@@ -67,8 +69,32 @@ export function Team() {
   );
 
   return (
-    <section ref={root} id="komanda" aria-labelledby="team-title" className="section page-x">
+    <section ref={root} id="komanda" aria-labelledby="team-title" className="section team-section page-x">
       <SectionHead n={10} id="team-title" title={content.team.title} className="team-title" />
+
+      <div className="team-intro">
+        <div className="team-intro__head">
+          <h3 className="t-display team-intro__title">
+            <RichText parts={o.title} />
+          </h3>
+          <ul className="team-intro__values t-mono">
+            {o.values.map((v) => (
+              <li key={v}>{v}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="team-intro__body">
+          <p className="t-lead">{o.lead}</p>
+          <p className="text-ink-2">{o.text}</p>
+          <p className="team-intro__motto ital">
+            {o.motto.map((m) => (
+              <span key={m} className="block">
+                {m}
+              </span>
+            ))}
+          </p>
+        </div>
+      </div>
 
       <div className="team-grid">
         {team.map((m, i) => {
@@ -105,3 +131,4 @@ export function Team() {
     </section>
   );
 }
+

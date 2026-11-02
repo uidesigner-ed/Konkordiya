@@ -14,7 +14,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
     <div className="adm-shell">
       <aside className="adm-side">
         <Link href="/admin" className="adm-brand">
-          <LogoMark className="bg-paper" />
+          <LogoMark />
           <span>
             Конкордія
             <small>адмінка</small>

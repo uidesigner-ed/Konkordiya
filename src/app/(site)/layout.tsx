@@ -30,7 +30,7 @@ const jsonLd = [
     description: homeSeo.description,
     url: site.url,
     image: `${site.url}/og.jpg`,
-    logo: `${site.url}/icon.png`,
+    logo: `${site.url}/logo.png`,
     telephone: "+380754966271",
     email: site.email,
     priceRange: "₴₴",
