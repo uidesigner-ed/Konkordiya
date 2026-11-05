@@ -366,6 +366,20 @@ html:not(.js-motion) .preloader {
   background-color: var(--logo);
   flex: none;
 }
+.logo-badge {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* трохи світліше за --emerald: шар .grain затемнює ~5%, на екрані виходить #0C1728 */
+  background: #0d182a;
+}
+.logo-badge .logo-mark {
+  width: 16px;
+  height: 20px;
+}
 
 .section {
   position: relative;

@@ -65,7 +65,7 @@ export function Header({ base = "" }: { base?: string }) {
             className="site-header__logo"
             aria-label={base ? `${site.name} — на головну` : `${site.name} — на початок сторінки`}
           >
-            <Logo />
+            <Logo badge />
           </a>
 
           <nav aria-label="Основна навігація" className="site-header__nav">

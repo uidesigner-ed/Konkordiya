@@ -60,8 +60,7 @@ export function Footer({ base = "" }: { base?: string }) {
     <footer ref={root} className="site-footer page-x">
       <div className="footer-top">
         <p className="footer-slogan t-display">
-          {f.slogan.replace(/!$/, "")}
-          <span className="text-red">!</span>
+          {f.slogan}
         </p>
         <nav aria-label="Навігація у футері" className="footer-nav">
           <ul>
